@@ -1,8 +1,9 @@
+'use client'
+
 import { createSlice } from "@reduxjs/toolkit";
 
-
 const initialState = {
-    user: false
+    user:  typeof window !== 'undefined' && localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : false
 }
 
 const auth = createSlice({
@@ -10,15 +11,15 @@ const auth = createSlice({
     initialState,
     reducers: {
         setUser(state, action) {
-            localStorage.setItem('user', JSON.stringify(action.payload))
+            typeof window !== 'undefined' && localStorage.setItem('user', JSON.stringify(action.payload))
             state.user = action.payload
         },
-        logout(state) {
-            localStorage.removeItem('user')
+        removeUser(state) {
+            typeof window !== 'undefined' && localStorage.removeItem('user')
             state.user = false
         }
     }
 })
 
-export const { setUser, logout } = auth.actions
+export const { setUser, removeUser } = auth.actions
 export default auth.reducer
