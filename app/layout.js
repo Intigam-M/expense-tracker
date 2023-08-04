@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 import { StoreProvider } from '@/store/StoreProvider';
 dotenv.config();
 
-
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
@@ -17,11 +16,9 @@ export default function RootLayout({ children }) {
     return (
         <StoreProvider >
             <html lang="en">
-                <body className={inter.className}>
+                <body className={`${inter.className} bg-slate-200`}>
                     <Toaster position='top-right' />
-                    <main>
-                        {children}
-                    </main>
+                    <main> {children} </main>
                 </body>
             </html>
         </StoreProvider>

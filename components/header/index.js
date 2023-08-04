@@ -7,8 +7,7 @@ import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { removeUser } from '@/store/auth'
 
-
-function LogoutButton() {
+function Header() {
 
     const { user } = useSelector(state => state.auth)
     const router = useRouter()
@@ -24,10 +23,12 @@ function LogoutButton() {
             router.replace('/login')
         }
     }, [user]);
-
-
-    return <button onClick={handleLogout}>Logout</button>
-
+    return (
+        <div>
+            Header
+            <button onClick={handleLogout} className='p-2 bg-blue-500 text-white rounded'>Logout</button>
+        </div>
+    )
 }
 
-export default LogoutButton
+export default Header
