@@ -1,6 +1,6 @@
-import Expense from '@/components/dashboardPage/balanceCard/expense';
-import Income from '@/components/dashboardPage/balanceCard/income';
-import Balance from '@/components/dashboardPage/balanceCard/balance';
+import Expense from '@/components/dashboardLayout/balanceCard/expense';
+import Income from '@/components/dashboardLayout/balanceCard/income';
+import Balance from '@/components/dashboardLayout/balanceCard/balance';
 
 function BalanceCard() {
     return (

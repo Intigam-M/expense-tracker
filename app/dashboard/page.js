@@ -1,15 +1,7 @@
-import DashboardContainer from '@/containers/dashboard'
-import Header from "@/components/header"
-import Footer from "@/components/footer"
+import TransactionContainer from '@/containers/transaction'
 
 function DashboardPage() {
-    return (
-        <div>
-            <Header />
-            <DashboardContainer />
-            <Footer />
-        </div>
-    )
+    return <TransactionContainer />
 }
 
 export default DashboardPage
