@@ -1,9 +1,8 @@
+import IncomeContainer from '@/containers/income'
 import React from 'react'
 
 function IncomePage() {
-  return (
-    <div>IncomePage</div>
-  )
+  return <IncomeContainer />
 }
 
 export default IncomePage

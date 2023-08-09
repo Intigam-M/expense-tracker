@@ -10,7 +10,7 @@ function Account() {
         </div>
         <div className='flex flex-col w-full'>
             <div>
-                <p className='font-medium'>Kapital bank</p>
+                <p className='font-medium text-slate-700'>Kapital bank</p>
             </div>
             <div className='border-b border-stone-400'>
                 <div className='flex items-center text-green-600 font-medium'>
