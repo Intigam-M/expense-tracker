@@ -1,9 +1,8 @@
+import ExpenseContainer from '@/containers/expense'
 import React from 'react'
 
 function ExpensePage() {
-  return (
-    <div>ExpensePage</div>
-  )
+  return <ExpenseContainer />
 }
 
 export default ExpensePage
