@@ -22,7 +22,6 @@ function ExpenseModal() {
 
 
 
-
     return (
         <div className='bg-white w-4/12 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded'>
             <div className='flex justify-end'>
@@ -33,12 +32,21 @@ function ExpenseModal() {
             <div className='pb-5 px-5'>
                 <div className='grid grid-cols-2'>
                     <div className='p-3 bg-red-500 text-white rounded-tl rounded-bl'>
-                        <p className='text-xs'>Hesabdan:</p>
-                        <p className='font-medium text-xl'>Kapital</p>
+                        <p className='text-xs pl-1'>Hesabdan:</p>
+                        <select class="bg-red-500 text-white text-xl font-medium  block w-full border-none focus:outline-none">
+                            <option value="US" selected>Kapital</option>
+                            <option value="CA">Xalq</option>
+                            <option value="FR">Nagd</option>
+                        </select>
                     </div>
                     <div className='p-3 bg-blue-500 text-white rounded-tr rounded-br'>
-                        <p className='text-xs'>Kateqoriya:</p>
-                        <p className='font-medium text-xl'>Ərzaq</p>
+                        <p className='text-xs pl-1'>Kateqoriya:</p>
+                        <select class="bg-blue-500 text-white text-xl font-medium block w-full border-none focus:outline-none">
+                            <option value="US" selected>Ərzaq</option>
+                            <option value="CA">Masin</option>
+                            <option value="FR">Hediyye</option>
+                        </select>
+
                     </div>
                 </div>
                 <div>
