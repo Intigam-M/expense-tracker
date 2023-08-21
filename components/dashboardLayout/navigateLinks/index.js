@@ -10,7 +10,7 @@ function NavigateButtons() {
     const pathname = usePathname()
 
     return (
-        <div className='flex justify-center'>
+        <div className='flex justify-center sticky top-0'>
             <div className=' w-4/12 border border-stone-400 rounded-lg'>
                 <div className='grid grid-cols-4'>
 

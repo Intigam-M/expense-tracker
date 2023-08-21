@@ -1,5 +1,6 @@
 import React from 'react'
 import Income from '@/components/incomePage';
+import { MdAddCircle } from 'react-icons/md'
 
 function IncomeContainer() {
     return (
@@ -8,6 +9,12 @@ function IncomeContainer() {
             <Income />
             <Income />
             <Income />
+            <Income />
+            <div className='flex justify-center'>
+                <button>
+                    <MdAddCircle className='text-7xl text-green-400' />
+                </button>
+            </div>
         </div>
     )
 }

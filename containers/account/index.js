@@ -1,4 +1,5 @@
 import Account from '@/components/accountPage';
+import { MdAddCircle } from 'react-icons/md';
 
 function AccountContainer() {
     return (
@@ -7,6 +8,11 @@ function AccountContainer() {
             <Account />
             <Account />
             <Account />
+            <div className='flex justify-end sticky bottom-0 w-6/12  mx-auto pb-5 pr-5 '>
+                <button>
+                    <MdAddCircle className='text-7xl text-green-400' />
+                </button>
+            </div>
         </div>
     )
 }
