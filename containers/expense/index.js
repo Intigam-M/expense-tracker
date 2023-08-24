@@ -1,5 +1,4 @@
 'use client'
-
 import Backdrop from "@/components/global/backdrop"
 import Expense from "@/components/expensePage"
 import ExpenseModal from "@/components/expensePage/expenseModal"

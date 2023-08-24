@@ -1,12 +1,12 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { closeExpenseModal} from '@/store/modal'
+import { closeAllModal} from '@/store/modal'
  
 function Backdrop() {
     const dispatch = useDispatch()
 
     const handleClick = () => {
-        dispatch(closeExpenseModal())
+        dispatch(closeAllModal())
     }
 
   return (

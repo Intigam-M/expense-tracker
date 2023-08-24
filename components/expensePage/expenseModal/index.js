@@ -33,16 +33,16 @@ function ExpenseModal() {
                 <div className='grid grid-cols-2'>
                     <div className='p-3 bg-red-500 text-white rounded-tl rounded-bl'>
                         <p className='text-xs pl-1'>Hesabdan:</p>
-                        <select class="bg-red-500 text-white text-xl font-medium  block w-full border-none focus:outline-none">
-                            <option value="US" selected>Kapital</option>
+                        <select defaultValue={'DEFAULT'} className="bg-red-500 text-white text-xl font-medium  block w-full border-none focus:outline-none">
+                            <option value="DEFAULT">Kapital</option>
                             <option value="CA">Xalq</option>
                             <option value="FR">Nagd</option>
                         </select>
                     </div>
                     <div className='p-3 bg-blue-500 text-white rounded-tr rounded-br'>
                         <p className='text-xs pl-1'>Kateqoriya:</p>
-                        <select class="bg-blue-500 text-white text-xl font-medium block w-full border-none focus:outline-none">
-                            <option value="US" selected>Ərzaq</option>
+                        <select defaultValue={'DEFAULT'} className="bg-blue-500 text-white text-xl font-medium block w-full border-none focus:outline-none">
+                            <option value="DEFAULT">Ərzaq</option>
                             <option value="CA">Masin</option>
                             <option value="FR">Hediyye</option>
                         </select>
