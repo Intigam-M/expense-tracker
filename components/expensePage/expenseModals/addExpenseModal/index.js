@@ -52,7 +52,7 @@ function AddExpenseModal() {
                 </div>
                 <div>
                     <form className='mt-5'>
-                        <p className='text-sm text-slate-500'>Məbləğ</p>
+                        <p className='text-sm text-slate-500'>Məbləğ xərc</p>
                         <input type="number" className='p-1 border rounded w-full' value={amount} onChange={e => setAmount(e.target.value)} />
 
                         <p className='text-sm text-slate-500'>Qeyd</p>
