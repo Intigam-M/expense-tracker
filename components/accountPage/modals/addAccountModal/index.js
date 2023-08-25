@@ -2,15 +2,16 @@
 import { useState } from 'react'
 import { IoCloseSharp } from 'react-icons/io5'
 import { useDispatch, useSelector } from 'react-redux'
-import { setAddExpenseCategoryModalStatus } from '@/store/modal'
+import { setAddAccountModalStatus } from '@/store/modal'
 
-function AddExpenseCategoryModal() {
+function AddAccountModal() {
     const [name, setName] = useState('')
-    const addExpenseCategoryModalIsActive= useSelector(state => state.modal.addExpenseCategory)
+    const [balance, setBalance] = useState(0)
+    const addAccountModalIsActive = useSelector(state => state.modal.addAccount)
     const dispatch = useDispatch()
 
     const closeModal = () => {
-        dispatch(setAddExpenseCategoryModalStatus(!addExpenseCategoryModalIsActive))
+        dispatch(setAddAccountModalStatus(!addAccountModalIsActive))
     }
 
     return (
@@ -21,11 +22,20 @@ function AddExpenseCategoryModal() {
                 </div>
             </div>
             <div className='pb-5 px-5'>
-
                 <div>
                     <form>
-                        <p className='text-sm text-slate-500'>Ad</p>
+                        <label className="text-sm text-slate-500">Növ</label>
+                        <select  defaultValue={'DEFAULT'} className="bg-gray-50 border border-gray-300 text-sm rounded w-full p-2.5">
+                            <option value="DEFAULT">Müntəzəm</option>
+                            <option value="CA">Borc</option>
+                        </select>
+
+                        <label className='text-sm text-slate-500'>Ad</label>
                         <input type="text" className='p-1.5 border rounded w-full' value={name} onChange={e => setName(e.target.value)} />
+
+                        <p className='text-sm text-slate-500'>Balans</p>
+                        <input type="number" className='p-1.5 border rounded w-full' value={balance} onChange={e => setBalance(e.target.value)} />
+
 
                         <button className=' py-2 w-full bg-green-500 rounded mt-5 text-white font-bold'>Daxil et</button>
                     </form>
@@ -35,4 +45,4 @@ function AddExpenseCategoryModal() {
     )
 }
 
-export default AddExpenseCategoryModal
+export default AddAccountModal

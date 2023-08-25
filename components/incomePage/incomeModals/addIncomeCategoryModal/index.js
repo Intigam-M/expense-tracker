@@ -23,9 +23,9 @@ function AddIncomeCategoryModal() {
             <div className='pb-5 px-5'>
 
                 <div>
-                    <form className='mt-5'>
+                    <form>
                         <p className='text-sm text-slate-500'>Ad</p>
-                        <input type="text" className='p-1 border rounded w-full' value={name} onChange={e => setName(e.target.value)} />
+                        <input type="text" className='p-1.5 border rounded w-full' value={name} onChange={e => setName(e.target.value)} />
 
                         <button className=' py-2 w-full bg-green-500 rounded mt-5 text-white font-bold'>Daxil et</button>
                     </form>

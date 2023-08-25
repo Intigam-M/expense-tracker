@@ -53,13 +53,13 @@ function AddExpenseModal() {
                 <div>
                     <form className='mt-5'>
                         <p className='text-sm text-slate-500'>Məbləğ xərc</p>
-                        <input type="number" className='p-1 border rounded w-full' value={amount} onChange={e => setAmount(e.target.value)} />
+                        <input type="number" className='p-1.5 border rounded w-full' value={amount} onChange={e => setAmount(e.target.value)} />
 
                         <p className='text-sm text-slate-500'>Qeyd</p>
-                        <input type="text" className='p-1 border rounded w-full' value={note} onChange={e => setNote(e.target.value)} />
+                        <input type="text" className='p-1.5 border rounded w-full' value={note} onChange={e => setNote(e.target.value)} />
 
                         <p className='text-sm text-slate-500'>Tarix</p>
-                        <input type="date" className='p-1 border rounded w-full' value={date} onChange={e => setDate(e.target.value)} />
+                        <input type="date" className='p-1.5 border rounded w-full' value={date} onChange={e => setDate(e.target.value)} />
 
                         <button className=' py-2 w-full bg-green-500 rounded mt-5 text-white font-bold'>Daxil et</button>
                     </form>
