@@ -2,18 +2,26 @@
 import React from 'react'
 import Income from '@/components/incomePage';
 import { MdAddCircle } from 'react-icons/md'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import Backdrop from "@/components/global/backdrop"
-import IncomeModal from "@/components/incomePage/incomeModal"
+import AddIncomeCategoryModal from "@/components/incomePage/incomeModals/addIncomeCategoryModal"
+import { setAddIncomeCategoryModalStatus } from '@/store/modal'
 
 function IncomeContainer() {
-    const incomeModal = useSelector(state => state.modal.income)
+    const dispatch = useDispatch()
+    const addIncomeCategoryModalIsActive = useSelector(state => state.modal.addIncomeCategory)
+
+    
+    const handleClick = () => {
+        dispatch(setAddIncomeCategoryModalStatus(!addIncomeCategoryModalIsActive))
+    }
+
     return (
         <div>
-             {incomeModal.show && (
+             {addIncomeCategoryModalIsActive && (
                 <>
                     <Backdrop />
-                    <IncomeModal />
+                    <AddIncomeCategoryModal />
                 </>
             )}
             <div className='w-4/12 mx-auto grid grid-cols-4 gap-3 '>
@@ -23,7 +31,7 @@ function IncomeContainer() {
                 <Income />
                 <Income />
                 <div className='flex justify-center'>
-                    <button>
+                    <button onClick={handleClick}>
                         <MdAddCircle className='text-7xl text-green-400' />
                     </button>
                 </div>

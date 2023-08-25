@@ -2,15 +2,15 @@
 import { TbCurrencyManat } from 'react-icons/Tb';
 import { FaWallet } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
-import { setIncomeModal } from '@/store/modal'
+import { setAddIncomeModalStatus } from '@/store/modal'
 
 function Income() {
 
     const dispatch = useDispatch()
-    const { show } = useSelector(state => state.modal.income)
+    const addIncomeModalIsActive= useSelector(state => state.modal.addIncome)
 
     const handleClick = () => {
-        dispatch(setIncomeModal({ show: !show, data: {} }))
+        dispatch(setAddIncomeModalStatus(!addIncomeModalIsActive))
     }
 
     return (

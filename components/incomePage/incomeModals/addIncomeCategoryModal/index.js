@@ -1,15 +1,16 @@
 'use client'
 import { useState } from 'react'
 import { IoCloseSharp } from 'react-icons/io5'
-import { useDispatch } from 'react-redux'
-import { closeIncomeModal } from '@/store/modal'
+import { useDispatch, useSelector } from 'react-redux'
+import { setAddIncomeCategoryModalStatus } from '@/store/modal'
 
-function IncomeModal() {
+function AddIncomeCategoryModal() {
     const [name, setName] = useState('')
+    const addIncomeCategoryModalIsActive= useSelector(state => state.modal.addIncomeCategory)
     const dispatch = useDispatch()
 
     const closeModal = () => {
-        dispatch(closeIncomeModal())
+        dispatch(setAddIncomeCategoryModalStatus(!addIncomeCategoryModalIsActive))
     }
 
     return (
@@ -34,4 +35,4 @@ function IncomeModal() {
     )
 }
 
-export default IncomeModal
+export default AddIncomeCategoryModal

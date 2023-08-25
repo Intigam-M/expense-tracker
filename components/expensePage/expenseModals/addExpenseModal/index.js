@@ -1,13 +1,14 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { IoCloseSharp } from 'react-icons/io5'
-import { useDispatch } from 'react-redux'
-import { closeExpenseModal } from '@/store/modal'
+import { useDispatch, useSelector } from 'react-redux'
+import { setAddExpenseModalStatus } from '@/store/modal'
 
-function ExpenseModal() {
+function AddExpenseModal() {
     const [amount, setAmount] = useState(0)
     const [note, setNote] = useState('')
     const [date, setDate] = useState('')
+    const addExpenseModalIsActive = useSelector(state => state.modal.addExpense)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -17,7 +18,7 @@ function ExpenseModal() {
     }, []);
 
     const closeModal = () => {
-        dispatch(closeExpenseModal())
+        dispatch(setAddExpenseModalStatus(!addExpenseModalIsActive))
     }
 
 
@@ -68,4 +69,4 @@ function ExpenseModal() {
     )
 }
 
-export default ExpenseModal
+export default AddExpenseModal

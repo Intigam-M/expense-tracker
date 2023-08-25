@@ -1,43 +1,38 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
-    expense:{
-        show:false,
-        data:{}
-    },
-    income:{
-        show:false,
-        data:{}
-    }
-
+    addExpense: false,
+    addExpenseCategory: false,
+    addIncome: false,
+    addIncomeCategory: false,
 }
 
 const modal = createSlice({ 
     name:'modal',
     initialState,
     reducers:{
-        setExpenseModal(state,action){
-            state.expense.show = action.payload.show
-            state.expense.data = action.payload.data
+        setAddExpenseModalStatus(state){
+            state.addExpense = !state.addExpense
         },
-        closeExpenseModal(state){
-            state.expense.show = false 
+        setAddExpenseCategoryModalStatus(state){
+            state.addExpenseCategory = !state.addExpenseCategory
         },
-        setIncomeModal(state,action){
-            state.income.show = action.payload.show
-            state.income.data = action.payload.data
+        setAddIncomeModalStatus(state){
+            state.addIncome = !state.addIncome
         },
-        closeIncomeModal(state){
-            state.income.show = false 
+        setAddIncomeCategoryModalStatus(state){
+            state.addIncomeCategory = !state.addIncomeCategory
         },
         closeAllModal(state){
-            state.income.show = false 
-            state.expense.show = false 
+            state.addExpense = false
+            state.addExpenseCategory = false
+            state.addIncome = false
+            state.addIncomeCategory = false
         }
 
     }
 })
 
-export const {setExpenseModal, closeExpenseModal, setIncomeModal, closeIncomeModal, closeAllModal} = modal.actions
+export const {setAddExpenseModalStatus, setAddExpenseCategoryModalStatus, setAddIncomeModalStatus, setAddIncomeCategoryModalStatus, closeAllModal} = modal.actions
 export default modal.reducer
 
