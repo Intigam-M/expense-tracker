@@ -4,12 +4,14 @@ import { MdAddCircle } from 'react-icons/md';
 import { useSelector, useDispatch } from 'react-redux';
 import { setAddAccountModalStatus } from '@/store/modal';
 import AddAccountModal from '@/components/accountPage/modals/addAccountModal';
+import EditAccountModal from '@/components/accountPage/modals/editAccountModal';
 import Backdrop from '@/components/global/backdrop';
 
 
 function AccountContainer() {
 
     const addAccountModalIsActive = useSelector(state => state.modal.addAccount)
+    const editAccountModalIsActive = useSelector(state => state.modal.editAccount)
     const dispatch = useDispatch()
 
     const handleClick = () => {
@@ -18,9 +20,10 @@ function AccountContainer() {
 
     return (
         <div>
-            {addAccountModalIsActive && <Backdrop />}
+            {(addAccountModalIsActive || editAccountModalIsActive) && <Backdrop />}
             {addAccountModalIsActive && <AddAccountModal />}
-
+            {editAccountModalIsActive && <EditAccountModal />}
+            
             <div className='flex flex-col gap-4'>
                 <Account />
                 <Account />

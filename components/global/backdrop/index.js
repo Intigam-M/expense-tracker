@@ -10,7 +10,7 @@ function Backdrop() {
     }
 
   return (
-    <div className='bg-black opacity-60 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-screen' onClick={handleClick}></div>
+    <div className='bg-black opacity-60 absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-screen' onClick={handleClick}></div>
   )
 }
 

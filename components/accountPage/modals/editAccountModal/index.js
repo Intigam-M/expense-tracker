@@ -2,16 +2,16 @@
 import { useState } from 'react'
 import { IoCloseSharp } from 'react-icons/io5'
 import { useDispatch, useSelector } from 'react-redux'
-import { setAddAccountModalStatus } from '@/store/modal'
+import { setEditAccountModalStatus } from '@/store/modal'
 
-function AddAccountModal() {
+function EditAccountModal() {
     const [name, setName] = useState('')
     const [balance, setBalance] = useState(0)
-    const addAccountModalIsActive = useSelector(state => state.modal.addAccount)
+    const editAccountModalIsActive = useSelector(state => state.modal.editAccount)
     const dispatch = useDispatch()
 
     const closeModal = () => {
-        dispatch(setAddAccountModalStatus(!addAccountModalIsActive))
+        dispatch(setEditAccountModalStatus(!editAccountModalIsActive))
     }
 
     return (
@@ -45,4 +45,4 @@ function AddAccountModal() {
     )
 }
 
-export default AddAccountModal
+export default EditAccountModal

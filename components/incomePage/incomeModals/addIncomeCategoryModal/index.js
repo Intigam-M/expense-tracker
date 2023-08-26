@@ -14,7 +14,7 @@ function AddIncomeCategoryModal() {
     }
 
     return (
-        <div className='bg-white w-4/12 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded'>
+        <div className='bg-white w-4/12 absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded'>
             <div className='flex justify-end'>
                 <div className='pb-2'>
                     <IoCloseSharp size={30} className='text-2xl cursor-pointer' onClick={closeModal} />
