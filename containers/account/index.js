@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setAddAccountModalStatus } from '@/store/modal';
 import AddAccountModal from '@/components/accountPage/modals/addAccountModal';
 import EditAccountModal from '@/components/accountPage/modals/editAccountModal';
+import TransferModal from '@/components/accountPage/modals/transferModal';
 import Backdrop from '@/components/global/backdrop';
 
 
@@ -12,6 +13,7 @@ function AccountContainer() {
 
     const addAccountModalIsActive = useSelector(state => state.modal.addAccount)
     const editAccountModalIsActive = useSelector(state => state.modal.editAccount)
+    const transferModalIsActive = useSelector(state => state.modal.transfer)
     const dispatch = useDispatch()
 
     const handleClick = () => {
@@ -20,9 +22,10 @@ function AccountContainer() {
 
     return (
         <div>
-            {(addAccountModalIsActive || editAccountModalIsActive) && <Backdrop />}
+            {(addAccountModalIsActive || editAccountModalIsActive || transferModalIsActive) && <Backdrop />}
             {addAccountModalIsActive && <AddAccountModal />}
             {editAccountModalIsActive && <EditAccountModal />}
+            {transferModalIsActive && <TransferModal />}
             
             <div className='flex flex-col gap-4'>
                 <Account />
