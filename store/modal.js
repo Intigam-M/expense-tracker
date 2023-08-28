@@ -3,6 +3,7 @@ import {createSlice} from "@reduxjs/toolkit";
 const initialState = {
     addExpense: false,
     addExpenseCategory: false,
+    editExpense: false,
     addIncome: false,
     addIncomeCategory: false,
     addAccount: false,
@@ -19,6 +20,9 @@ const modal = createSlice({
         },
         setAddExpenseCategoryModalStatus(state){
             state.addExpenseCategory = !state.addExpenseCategory
+        },
+        setEditExpenseModalStatus(state){
+            state.editExpense = !state.editExpense
         },
         setAddIncomeModalStatus(state){
             state.addIncome = !state.addIncome
@@ -40,6 +44,7 @@ const modal = createSlice({
         closeAllModal(state){
             state.addExpense = false
             state.addExpenseCategory = false
+            setEditExpenseModalStatus
             state.addIncome = false
             state.addIncomeCategory = false
             state.addAccount = false
@@ -50,6 +55,6 @@ const modal = createSlice({
     }
 })
 
-export const {setAddExpenseModalStatus, setAddExpenseCategoryModalStatus, setAddIncomeModalStatus, setAddIncomeCategoryModalStatus, setAddAccountModalStatus, setEditAccountModalStatus, setTransferModalStatus, closeAllModal} = modal.actions
+export const {setAddExpenseModalStatus, setAddExpenseCategoryModalStatus, setAddIncomeModalStatus, setAddIncomeCategoryModalStatus, setAddAccountModalStatus, setEditAccountModalStatus, setTransferModalStatus, setEditExpenseModalStatus, closeAllModal} = modal.actions
 export default modal.reducer
 

@@ -2,19 +2,24 @@
 import { TbCurrencyManat } from 'react-icons/Tb';
 import { FaWallet } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
-import { setAddExpenseModalStatus} from '@/store/modal'
+import { setAddExpenseModalStatus, setEditExpenseModalStatus } from '@/store/modal'
 
 
-function Expense() {
+function Expense({ editIsactive }) {
 
     const dispatch = useDispatch()
     const addExpenseModalIsActive = useSelector(state => state.modal.addExpense)
+    const editExpenseModalIsActive= useSelector(state => state.modal.editExpense)
 
 
     const handleClick = () => {
-       dispatch(setAddExpenseModalStatus(!addExpenseModalIsActive))
+        if (editIsactive){
+            dispatch(setEditExpenseModalStatus(!editExpenseModalIsActive))
+        }else{
+            dispatch(setAddExpenseModalStatus(!addExpenseModalIsActive))
+        }
     }
-   
+
 
     return (
         <button onClick={handleClick}>
