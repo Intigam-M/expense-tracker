@@ -7,15 +7,18 @@ import { MdAddCircle } from 'react-icons/md'
 import { useSelector, useDispatch } from 'react-redux'
 import { setAddExpenseCategoryModalStatus } from '@/store/modal'
 import { FiEdit2 } from 'react-icons/fi'
-import { useState } from 'react'
+import {useEffect, useState } from 'react'
 import EditExpenseModal from "@/components/expensePage/expenseModals/editExpenseModal"
+import { listenForDataUpdates } from "@/app/firebase"
 
 
 function ExpenseContainer() {
     const addExpenseModalIsActive = useSelector(state => state.modal.addExpense)
     const addExpenseCategoryModalIsActive = useSelector(state => state.modal.addExpenseCategory)
     const editExpenseModalIsActive = useSelector(state => state.modal.editExpense)
+    const userId = useSelector(state => state.auth.user.uid)
     const [editIsactive, setEditIsActive] = useState(false)
+    const [expenseCategory, setExpenseCategory] = useState([])
     const dispatch = useDispatch()
 
     const handleAddClick = () => {
@@ -26,6 +29,12 @@ function ExpenseContainer() {
     const handleEditClick = () => {
         setEditIsActive(!editIsactive)
     }
+
+    useEffect(() => {
+        listenForDataUpdates(userId + '/expenseCategory', (data) => {
+            setExpenseCategory(data)
+        })
+    }, [])
 
     return (
         <div >
@@ -39,12 +48,7 @@ function ExpenseContainer() {
                     <MdAddCircle title="Xərc əlavə et" size={35} className='text-2xl text-white p-2 bg-green-500 rounded cursor-pointer' onClick={handleAddClick} />
                 </div>
                 <div className='grid grid-cols-4 gap-3 '>
-                    <Expense editIsactive={editIsactive} />
-                    <Expense editIsactive={editIsactive} />
-                    <Expense editIsactive={editIsactive} />
-                    <Expense editIsactive={editIsactive} />
-                    <Expense editIsactive={editIsactive} />
-                    <Expense editIsactive={editIsactive} />
+                    {expenseCategory.map((category, index) => <Expense key={index} category={category} editIsactive={editIsactive} />)}
                 </div>
             </div>
         </div>
