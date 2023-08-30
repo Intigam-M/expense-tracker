@@ -11,6 +11,8 @@ function AddExpenseCategoryModal() {
     const [name, setName] = useState('')
     const [selectedIcon, setSelectedIcon] = useState('');
     const [color, setColor] = useState('#ff471a')
+    const [subCategory, setSubCategory] = useState([])
+    const [subCategoryInput, setSubCategoryInput] = useState('')
     const addExpenseCategoryModalIsActive = useSelector(state => state.modal.addExpenseCategory)
     const userId = useSelector(state => state.auth.user.uid)
     const dispatch = useDispatch()
@@ -48,8 +50,7 @@ function AddExpenseCategoryModal() {
     }
 
 
-    const addExpense = async (e) => {
-        e.preventDefault()
+    const addExpense = async () => {
 
         if (!name.trim() || !selectedIcon || !color) {
             toast.error('Bütün xanaları doldurun')
@@ -63,11 +64,27 @@ function AddExpenseCategoryModal() {
             name: name,
             icon: selectedIcon,
             color: color,
-            subCategory: []
+            subCategory: [
+                ...subCategory
+            ]
         }]
 
         setData(data, userId + '/expenseCategory')
         dispatch(setAddExpenseCategoryModalStatus(!addExpenseCategoryModalIsActive))
+    }
+
+    const addSubCategory = () => {
+        if (!subCategoryInput.trim()) {
+            toast.error('Xananı doldurun')
+            return
+        }
+        setSubCategory([...subCategory, subCategoryInput])
+        setSubCategoryInput('')
+    }
+
+    const deleteSubCategory = (e) => {
+        const newSubCategory = subCategory.filter(item => item !== e.target.innerText)
+        setSubCategory(newSubCategory)
     }
 
 
@@ -81,28 +98,38 @@ function AddExpenseCategoryModal() {
             <div className='pb-5 px-5'>
 
                 <div>
-                    <form>
-                        <label className='text-sm text-slate-500'>Ad</label>
-                        <input type="text" className='p-1.5 border rounded w-full' value={name} onChange={e => setName(e.target.value)} />
+                    <label className='text-sm text-slate-500'>Ad</label>
+                    <input type="text" className='p-1.5 border rounded w-full' value={name} onChange={e => setName(e.target.value)} />
 
-                        <label className='text-sm text-slate-500 mt-2'>Icon</label>
-                        <div className='border flex flex-wrap p-1 gap-2'>
-                            {iconList.map((iconName) => (
-                                <IconWithProps
-                                    key={iconName}
-                                    iconName={iconName}
-                                    selectedIcon={selectedIcon}
-                                    onClick={() => setSelectedIcon(iconName)}
-                                />
-                            ))}
+                    <label className='text-sm text-slate-500 mt-2'>Icon</label>
+                    <div className='border flex flex-wrap p-1 gap-2'>
+                        {iconList.map((iconName) => (
+                            <IconWithProps
+                                key={iconName}
+                                iconName={iconName}
+                                selectedIcon={selectedIcon}
+                                onClick={() => setSelectedIcon(iconName)}
+                            />
+                        ))}
 
-                        </div>
+                    </div>
 
-                        <label className='text-sm text-slate-500 mt-2'>Color</label>
-                        <input type="color" className='p-1.5 border rounded w-full' value={color} onChange={e => setColor(e.target.value)} />
+                    <label className='text-sm text-slate-500 mt-2'>Color</label>
+                    <input type="color" className='p-1.5 border rounded w-full' value={color} onChange={e => setColor(e.target.value)} />
 
-                        <button className=' py-2 w-full bg-green-500 rounded mt-5 text-white font-bold' onClick={addExpense}>Daxil et</button>
-                    </form>
+                    <label className='text-sm text-slate-500 mt-2'>Alt kateqoriya əlavə et</label>
+                    <div className='flex'>
+                        <input type="text" className='p-1.5 border rounded' value={subCategoryInput} onChange={e => setSubCategoryInput(e.target.value)} />
+                        <button className='bg-yellow-500 text-white px-4 rounded ml-2' onClick={addSubCategory}>Əlavə et</button>
+                    </div>
+                    <ul className='flex gap-1 mt-3'>
+                        {subCategory.map((item, index) => (
+                            <li key={index} title='Delete subcategory' className='text-white font-medium border px-2 rounded bg-red-400 cursor-pointer' onClick={deleteSubCategory}>{item}</li>
+                        ))}
+                    </ul>
+
+                    <button className=' py-2 w-full bg-green-500 rounded mt-5 text-white font-bold' onClick={addExpense}>Daxil et</button>
+
                 </div>
             </div>
         </div>
