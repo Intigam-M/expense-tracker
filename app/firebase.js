@@ -22,14 +22,12 @@ const db = getDatabase();
 export const register = async (email, password) => {
     try {
         const { user } = await createUserWithEmailAndPassword(auth, email, password)
-        setData(userData, user.uid)
+        setData(userData, 'user/'+user.uid)
         return user;
     } catch (error) {
         toast.error(error.message)
     }
 }
-
-
 export const login = async (email, password) => {
     try {
         const { user } = await signInWithEmailAndPassword(auth, email, password)
@@ -39,8 +37,6 @@ export const login = async (email, password) => {
         toast.error(error.message)
     }
 }
-
-
 export const logout = async () => {
     try {
         await signOut(auth)
@@ -51,14 +47,12 @@ export const logout = async () => {
 }
 
 
-
-
 // ------------------ DATABASE ------------------
 
 
 export const setData = async (data, path) => {
     try {
-        const setDataRef = ref(db, 'expenseTracker/'+ path);
+        const setDataRef = ref(db, path);
         await set(setDataRef, data);
         return true;
     } catch (error) {
@@ -66,9 +60,9 @@ export const setData = async (data, path) => {
     }
 }
 
-export const addData = async (data, path) => {
+export const pushData = async (data, path) => {
     try {
-        const addDataRef = ref(db, 'expenseTracker/'+ path);
+        const addDataRef = ref(db, path);
         await push(addDataRef, data);
         return true;
     } catch (error) {
@@ -78,7 +72,7 @@ export const addData = async (data, path) => {
 
 export const updateData = async (data, path) => {
     try {
-        const updateDataRef = ref(db, 'expenseTracker/' + path);
+        const updateDataRef = ref(db, path);
         await update(updateDataRef, data);
         return true;
     } catch (error) {
@@ -88,7 +82,7 @@ export const updateData = async (data, path) => {
 
 export const deleteData = async (path) => {
     try {
-        const deleteDataRef = ref(db, 'expenseTracker/' + path);
+        const deleteDataRef = ref(db, path);
         await remove(deleteDataRef);
         return true;
     } catch (error) {
@@ -98,7 +92,7 @@ export const deleteData = async (path) => {
 
 export const getData = async (path) => {
     try {
-        const dataRef = ref(db, 'expenseTracker/' + path);
+        const dataRef = ref(db, path);
         const snapshot = await get(dataRef);
 
         if (snapshot.exists()) {
@@ -115,7 +109,7 @@ export const getData = async (path) => {
 };
 
 export const listenForDataUpdates = (path, callback) => {
-    const dataRef = ref(db, 'expenseTracker/' + path);
+    const dataRef = ref(db, path);
 
     const dataListener = onValue(dataRef, (snapshot) => {
         if (snapshot.exists()) {
@@ -135,10 +129,6 @@ export const listenForDataUpdates = (path, callback) => {
         off(dataRef, 'value', dataListener);
     };
 };
-
-
-
-
 
 
 
