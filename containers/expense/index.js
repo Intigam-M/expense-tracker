@@ -8,41 +8,41 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setAddExpenseCategoryModalStatus } from '@/store/modal'
 import { FiEdit2 } from 'react-icons/fi'
 import { useEffect, useState } from 'react'
-import EditExpenseModal from "@/components/expensePage/expenseModals/editExpenseModal"
 import { listenForDataUpdates } from "@/app/firebase"
-import { setAddExpenseModalStatus, setEditExpenseModalStatus } from '@/store/modal'
+import { setAddExpenseModalStatus } from '@/store/modal'
+import EditExpenseSubCategoryModal from "@/components/expensePage/expenseModals/editExpenseSubCategoryModal"
 
 
 function ExpenseContainer() {
     const addExpenseModalIsActive = useSelector(state => state.modal.addExpense)
     const addExpenseCategoryModalIsActive = useSelector(state => state.modal.addExpenseCategory)
-    const editExpenseModalIsActive = useSelector(state => state.modal.editExpense)
+    const editExpenseSubCategoryModalIsActive = useSelector(state => state.modal.editExpenseSubCategory)
     const userId = useSelector(state => state.auth.user.uid)
     const [editIsactive, setEditIsActive] = useState(false)
     const [expenseCategory, setExpenseCategory] = useState()
-    const [editExpenseId, setEditExpenseId] = useState([])
+    const [editExpenseCategoryId, setEditExpenseCategoryId] = useState()
     const dispatch = useDispatch()
 
     const handleAddClick = () => {
+        setEditExpenseCategoryId(null)
         dispatch(setAddExpenseCategoryModalStatus(!addExpenseCategoryModalIsActive))
     }
-
 
     const handleEditClick = () => {
         setEditIsActive(!editIsactive)
     }
 
     useEffect(() => {
-        listenForDataUpdates('user/'+userId + '/expenseCategory', (data) => {
+        listenForDataUpdates('user/' + userId + '/expenseCategory', (data) => {
             setExpenseCategory(data)
         })
     }, [])
 
 
-    const handleExpenseClick = (id) => {
+    const handleExpenseClick = ( categoryId) => {
         if (editIsactive) {
-            setEditExpenseId(id)
-            dispatch(setEditExpenseModalStatus(!editExpenseModalIsActive))
+            setEditExpenseCategoryId( categoryId )
+            dispatch(setAddExpenseCategoryModalStatus(!addExpenseCategoryModalIsActive))
         } else {
             dispatch(setAddExpenseModalStatus(!addExpenseModalIsActive))
         }
@@ -51,10 +51,10 @@ function ExpenseContainer() {
 
     return (
         <div >
-            {(addExpenseModalIsActive || addExpenseCategoryModalIsActive || editExpenseModalIsActive) && <Backdrop />}
-            {addExpenseCategoryModalIsActive && <AddExpenseCategoryModal />}
+            {(addExpenseModalIsActive || addExpenseCategoryModalIsActive || editExpenseSubCategoryModalIsActive) && <Backdrop />}
+            {addExpenseCategoryModalIsActive && <AddExpenseCategoryModal categoryId={editExpenseCategoryId} />}
             {addExpenseModalIsActive && <AddExpenseModal />}
-            {editExpenseModalIsActive && <EditExpenseModal categoryId={editExpenseId} />}
+            {editExpenseSubCategoryModalIsActive && <EditExpenseSubCategoryModal />}
             <div className="w-4/12 mx-auto ">
                 <div className="flex justify-end mb-1 gap-2">
                     <FiEdit2 title="Düzəliş et" size={35} className={`text-2xl text-white p-2 rounded cursor-pointer ${editIsactive ? "bg-red-500" : "opacity-40 bg-red-400"} `} onClick={handleEditClick} />
@@ -63,7 +63,7 @@ function ExpenseContainer() {
                 <div className='grid grid-cols-4 gap-3 '>
                     {expenseCategory && Object.keys(expenseCategory).map((item, index) => {
                         return (
-                            <Expense key={index} category={expenseCategory[item]} onClick={() => handleExpenseClick(index)} />
+                            <Expense key={index} category={expenseCategory[item]} onClick={() => handleExpenseClick(item)} />
                         )
                     })}
                 </div>

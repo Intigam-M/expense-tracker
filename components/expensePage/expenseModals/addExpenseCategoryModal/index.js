@@ -1,14 +1,16 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { IoCloseSharp } from 'react-icons/io5'
 import { useDispatch, useSelector } from 'react-redux'
 import { setAddExpenseCategoryModalStatus } from '@/store/modal'
-import { pushData } from '@/app/firebase'
+import { pushData, updateData, listenForDataUpdates } from '@/app/firebase'
 import IconWithProps from '@/components/global/IconWithProps'
 import toast from "react-hot-toast";
 import { expenseIconList } from "@/lib/icon"
+import { setEditExpenseSubCategoryModalStatus } from '@/store/modal'
+import { setEditExpenseSubCategory } from '@/store/editExpenseSubCategory'
 
-function AddExpenseCategoryModal() {
+function AddExpenseCategoryModal({ categoryId }) {
     const [name, setName] = useState('')
     const [selectedIcon, setSelectedIcon] = useState('');
     const [color, setColor] = useState('#ff471a')
@@ -18,11 +20,23 @@ function AddExpenseCategoryModal() {
     const userId = useSelector(state => state.auth.user.uid)
     const dispatch = useDispatch()
 
+
+    useEffect(() => {
+        if (!categoryId) return
+        listenForDataUpdates('user/' + userId + '/expenseCategory/' + categoryId, (data) => {
+            setName(data.name);
+            setSelectedIcon(data.icon);
+            setColor(data.color);
+            setSubCategory(data.subCategory);
+        })
+    }, []);
+
+
     const closeModal = () => {
         dispatch(setAddExpenseCategoryModalStatus(!addExpenseCategoryModalIsActive))
     }
 
-    const addExpense = async () => {
+    const addExpenseCategory = async () => {
 
         if (!name.trim() || !selectedIcon || !color) {
             toast.error('Bütün xanaları doldurun')
@@ -38,7 +52,11 @@ function AddExpenseCategoryModal() {
             }
         };
 
-        pushData(newCategory, 'user/' + userId + '/expenseCategory')
+        if (categoryId) {
+            updateData(newCategory, 'user/' + userId + '/expenseCategory/' + categoryId)
+        } else {
+            pushData(newCategory, 'user/' + userId + '/expenseCategory')
+        }
         dispatch(setAddExpenseCategoryModalStatus(!addExpenseCategoryModalIsActive))
     }
 
@@ -47,22 +65,35 @@ function AddExpenseCategoryModal() {
             toast.error('Xananı doldurun')
             return
         }
-        setSubCategory(prev => {
-            return {
-                ...prev,
-                [Object.keys(prev).length]: subCategoryInput
-            }
-        })
 
+        if (categoryId) {
+            pushData(subCategoryInput, 'user/' + userId + '/expenseCategory/' + categoryId + '/subCategory')
+        } else {
+            const uniqueId = Math.random().toString(36).substr(2, 9)
+            setSubCategory(prev => {
+                return {
+                    ...prev,
+                    [uniqueId]: subCategoryInput
+                }
+            })
+        }
         setSubCategoryInput('')
     }
 
-    const deleteSubCategory = (index) => {
-        setSubCategory(prev => {
-            const newSubCategory = { ...prev }
-            delete newSubCategory[index]
-            return newSubCategory
-        })
+    const editSubCategory = (index) => {
+
+        if (categoryId) {
+            dispatch(setEditExpenseSubCategory({ categoryId, subCategoryId: index, subCategoryName: subCategory[index] }))
+            dispatch(setEditExpenseSubCategoryModalStatus(true))
+            dispatch(setAddExpenseCategoryModalStatus(!addExpenseCategoryModalIsActive))
+        } else {
+
+            setSubCategory(prev => {
+                const newSubCategory = { ...prev }
+                delete newSubCategory[index]
+                return newSubCategory
+            })
+        }
     }
 
     return (
@@ -101,14 +132,14 @@ function AddExpenseCategoryModal() {
                         <button className='bg-yellow-500 text-white px-4 rounded ml-2' onClick={addSubCategory}>Əlavə et</button>
                     </div>
                     <ul className='flex gap-1 mt-3'>
-                        {Object.keys(subCategory).map((item, index) => (
+                        {subCategory && Object.keys(subCategory).map((item, index) => (
                             <li key={index} title='Delete subcategory'
                                 className='text-white font-medium border px-2 rounded bg-red-400 cursor-pointer'
-                                onClick={() => deleteSubCategory(item)}>{subCategory[item]}</li>
+                                onClick={() => editSubCategory(item)}>{subCategory[item]}</li>
                         ))}
                     </ul>
 
-                    <button className=' py-2 w-full bg-green-500 rounded mt-5 text-white font-bold' onClick={addExpense}>Daxil et</button>
+                    <button className=' py-2 w-full bg-green-500 rounded mt-5 text-white font-bold' onClick={addExpenseCategory}>{categoryId ? "Update" : "Insert"}</button>
 
                 </div>
             </div>

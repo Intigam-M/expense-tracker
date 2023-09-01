@@ -3,7 +3,7 @@ import {createSlice} from "@reduxjs/toolkit";
 const initialState = {
     addExpense: false,
     addExpenseCategory: false,
-    editExpense: false,
+    editExpenseSubCategory: false,
     addIncome: false,
     addIncomeCategory: false,
     editIncome: false,
@@ -22,8 +22,8 @@ const modal = createSlice({
         setAddExpenseCategoryModalStatus(state){
             state.addExpenseCategory = !state.addExpenseCategory
         },
-        setEditExpenseModalStatus(state){
-            state.editExpense = !state.editExpense
+        setEditExpenseSubCategoryModalStatus(state){
+            state.editExpenseSubCategory = !state.editExpenseSubCategory
         },
         setAddIncomeModalStatus(state){
             state.addIncome = !state.addIncome
@@ -48,7 +48,7 @@ const modal = createSlice({
         closeAllModal(state){
             state.addExpense = false
             state.addExpenseCategory = false
-            state.editExpense = false
+            state.editExpenseSubCategory = false
             state.addIncome = false
             state.addIncomeCategory = false
             state.editIncome = false
@@ -60,6 +60,6 @@ const modal = createSlice({
     }
 })
 
-export const {setAddExpenseModalStatus, setAddExpenseCategoryModalStatus, setAddIncomeModalStatus, setAddIncomeCategoryModalStatus, setAddAccountModalStatus, setEditAccountModalStatus, setTransferModalStatus, setEditExpenseModalStatus, setEditIncomeModalStatus, closeAllModal} = modal.actions
+export const {setAddExpenseModalStatus, setAddExpenseCategoryModalStatus, setAddIncomeModalStatus, setAddIncomeCategoryModalStatus, setAddAccountModalStatus, setEditAccountModalStatus, setTransferModalStatus, setEditExpenseSubCategoryModalStatus, setEditIncomeModalStatus, closeAllModal} = modal.actions
 export default modal.reducer
 
