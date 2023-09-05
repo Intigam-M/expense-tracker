@@ -1,32 +1,22 @@
 'use client'
 import { TbCurrencyManat } from 'react-icons/Tb';
-import { FaWallet } from 'react-icons/fa'
-import { useDispatch, useSelector } from 'react-redux'
-import { setAddIncomeModalStatus, setEditIncomeModalStatus } from '@/store/modal'
+import * as ReactIcons from 'react-icons/fa';
 
-function Income({editIsactive}) {
+function Income({ category, onClick }) {
 
-    const dispatch = useDispatch()
-    const addIncomeModalIsActive= useSelector(state => state.modal.addIncome)
-    const editIncomeModalIsActive = useSelector(state => state.modal.editIncome)
+    const IncomeIcon = ReactIcons[category.icon];
 
-
-    const handleClick = () => {
-        if (editIsactive){
-            dispatch(setEditIncomeModalStatus(!editIncomeModalIsActive))
-        }else{
-            dispatch(setAddIncomeModalStatus(!addIncomeModalIsActive))
-        }
-    }
-
+    const divStyle = {
+        backgroundColor: category.color
+    };
 
 
     return (
-        <button onClick={handleClick}>
+        <button onClick={onClick}>
         <div className='flex flex-col items-center bg-slate-300 rounded-md p-2 border shadow'>
-            <p className='text-slate-700'>Salary</p>
-            <div className='rounded-full bg-orange-500 p-3'>
-                <FaWallet className='text-xl text-white' />
+            <p className='text-slate-700'>{category.name}</p>
+            <div className='rounded-full p-3' style={divStyle}>
+                <IncomeIcon className='text-xl text-white' />
             </div>
             <div>
                 <div className='flex items-center text-green-600 font-medium'>

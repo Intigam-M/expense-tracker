@@ -2,21 +2,21 @@
 import { useEffect, useState } from 'react'
 import { IoCloseSharp } from 'react-icons/io5'
 import { useDispatch, useSelector } from 'react-redux'
-import { setAddExpenseCategoryModalStatus } from '@/store/modal'
-import { pushData, updateData, listenForDataUpdates } from '@/app/firebase'
+import { setUpdateExpenseCategoryModalStatus } from '@/store/modal'
+import { pushData, updateData, listenForDataUpdates, deleteData } from '@/app/firebase'
 import IconWithProps from '@/components/global/IconWithProps'
 import toast from "react-hot-toast";
 import { expenseIconList } from "@/lib/icon"
 import { setEditExpenseSubCategoryModalStatus } from '@/store/modal'
 import { setEditExpenseSubCategory } from '@/store/editExpenseSubCategory'
 
-function AddExpenseCategoryModal({ categoryId }) {
+function UpdateExpenseCategoryModal({ categoryId }) {
     const [name, setName] = useState('')
     const [selectedIcon, setSelectedIcon] = useState('');
     const [color, setColor] = useState('#ff471a')
     const [subCategory, setSubCategory] = useState({})
     const [subCategoryInput, setSubCategoryInput] = useState('')
-    const addExpenseCategoryModalIsActive = useSelector(state => state.modal.addExpenseCategory)
+    const updateExpenseCategoryModalIsActive = useSelector(state => state.modal.updateExpenseCategory)
     const userId = useSelector(state => state.auth.user.uid)
     const dispatch = useDispatch()
 
@@ -24,19 +24,19 @@ function AddExpenseCategoryModal({ categoryId }) {
     useEffect(() => {
         if (!categoryId) return
         listenForDataUpdates('user/' + userId + '/expenseCategory/' + categoryId, (data) => {
-            setName(data.name);
-            setSelectedIcon(data.icon);
-            setColor(data.color);
-            setSubCategory(data.subCategory);
+            setName(data?.name);
+            setSelectedIcon(data?.icon);
+            setColor(data?.color);
+            setSubCategory(data?.subCategory);
         })
     }, []);
 
 
     const closeModal = () => {
-        dispatch(setAddExpenseCategoryModalStatus(!addExpenseCategoryModalIsActive))
+        dispatch(setUpdateExpenseCategoryModalStatus(!updateExpenseCategoryModalIsActive))
     }
 
-    const addExpenseCategory = async () => {
+    const updateExpenseCategory = async () => {
 
         if (!name.trim() || !selectedIcon || !color) {
             toast.error('Bütün xanaları doldurun')
@@ -57,7 +57,7 @@ function AddExpenseCategoryModal({ categoryId }) {
         } else {
             pushData(newCategory, 'user/' + userId + '/expenseCategory')
         }
-        dispatch(setAddExpenseCategoryModalStatus(!addExpenseCategoryModalIsActive))
+        dispatch(setUpdateExpenseCategoryModalStatus(!updateExpenseCategoryModalIsActive))
     }
 
     const addSubCategory = () => {
@@ -85,7 +85,7 @@ function AddExpenseCategoryModal({ categoryId }) {
         if (categoryId) {
             dispatch(setEditExpenseSubCategory({ categoryId, subCategoryId: index, subCategoryName: subCategory[index] }))
             dispatch(setEditExpenseSubCategoryModalStatus(true))
-            dispatch(setAddExpenseCategoryModalStatus(!addExpenseCategoryModalIsActive))
+            dispatch(setUpdateExpenseCategoryModalStatus(!updateExpenseCategoryModalIsActive))
         } else {
 
             setSubCategory(prev => {
@@ -96,10 +96,16 @@ function AddExpenseCategoryModal({ categoryId }) {
         }
     }
 
+
+    const deleteExpenseCategory = () => {
+        deleteData('user/' + userId + '/expenseCategory/' + categoryId)
+        dispatch(setUpdateExpenseCategoryModalStatus(!updateExpenseCategoryModalIsActive))
+    }
+
     return (
         <div className='bg-white w-4/12 absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded'>
             <div className='flex justify-between items-center shadow-md mb-5'>
-                <p className='text-slate-500 pl-5 font-bold'>Add expense Category</p>
+                <p className='text-slate-500 pl-5 font-bold'>{categoryId ? "Edit" : "Add"} expense Category</p>
                 <div className='pb-2'>
                     <IoCloseSharp size={30} className='text-2xl cursor-pointer' onClick={closeModal} />
                 </div>
@@ -139,12 +145,18 @@ function AddExpenseCategoryModal({ categoryId }) {
                         ))}
                     </ul>
 
-                    <button className=' py-2 w-full bg-green-500 rounded mt-5 text-white font-bold' onClick={addExpenseCategory}>{categoryId ? "Update" : "Insert"}</button>
+                    <button className=' py-2 w-full bg-green-500 rounded mt-5 text-white font-bold' onClick={updateExpenseCategory}>{categoryId ? "Update" : "Insert"}</button>
 
                 </div>
             </div>
+            {
+                categoryId &&
+                <div className='border-t mt-2 py-5 px-5'>
+                    <button className=' py-2 w-full bg-red-500 rounded text-white font-bold' onClick={deleteExpenseCategory}>Delete expense</button>
+                </div>
+            }
         </div>
     )
 }
 
-export default AddExpenseCategoryModal
+export default UpdateExpenseCategoryModal

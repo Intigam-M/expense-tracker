@@ -2,11 +2,10 @@ import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
     addExpense: false,
-    addExpenseCategory: false,
+    updateExpenseCategory: false,
     editExpenseSubCategory: false,
     addIncome: false,
-    addIncomeCategory: false,
-    editIncome: false,
+    updateIncomeCategory: false,
     addAccount: false,
     editAccount: false,
     transfer: false,
@@ -19,8 +18,8 @@ const modal = createSlice({
         setAddExpenseModalStatus(state){
             state.addExpense = !state.addExpense
         },
-        setAddExpenseCategoryModalStatus(state){
-            state.addExpenseCategory = !state.addExpenseCategory
+        setUpdateExpenseCategoryModalStatus(state){
+            state.updateExpenseCategory = !state.updateExpenseCategory
         },
         setEditExpenseSubCategoryModalStatus(state){
             state.editExpenseSubCategory = !state.editExpenseSubCategory
@@ -28,11 +27,8 @@ const modal = createSlice({
         setAddIncomeModalStatus(state){
             state.addIncome = !state.addIncome
         },
-        setAddIncomeCategoryModalStatus(state){
-            state.addIncomeCategory = !state.addIncomeCategory
-        },
-        setEditIncomeModalStatus(state){
-            state.editIncome = !state.editIncome
+        setUpdateIncomeCategoryModalStatus(state){
+            state.updateIncomeCategory = !state.updateIncomeCategory
         },
         setAddAccountModalStatus(state){
             state.addAccount = !state.addAccount
@@ -47,11 +43,10 @@ const modal = createSlice({
 
         closeAllModal(state){
             state.addExpense = false
-            state.addExpenseCategory = false
+            state.updateExpenseCategory = false
             state.editExpenseSubCategory = false
             state.addIncome = false
-            state.addIncomeCategory = false
-            state.editIncome = false
+            state.updateIncomeCategory = false
             state.addAccount = false
             state.editAccount = false
             state.transfer = false
@@ -60,6 +55,6 @@ const modal = createSlice({
     }
 })
 
-export const {setAddExpenseModalStatus, setAddExpenseCategoryModalStatus, setAddIncomeModalStatus, setAddIncomeCategoryModalStatus, setAddAccountModalStatus, setEditAccountModalStatus, setTransferModalStatus, setEditExpenseSubCategoryModalStatus, setEditIncomeModalStatus, closeAllModal} = modal.actions
+export const {setAddExpenseModalStatus, setUpdateExpenseCategoryModalStatus, setAddIncomeModalStatus, setUpdateIncomeCategoryModalStatus, setAddAccountModalStatus, setEditAccountModalStatus, setTransferModalStatus, setEditExpenseSubCategoryModalStatus, closeAllModal} = modal.actions
 export default modal.reducer
 

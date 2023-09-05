@@ -1,37 +1,55 @@
 'use client'
-import React from 'react'
 import Income from '@/components/incomePage';
 import { MdAddCircle } from 'react-icons/md'
 import { useSelector, useDispatch } from 'react-redux'
 import Backdrop from "@/components/global/backdrop"
-import AddIncomeCategoryModal from "@/components/incomePage/incomeModals/addIncomeCategoryModal"
+import UpdateIncomeCategoryModal from "@/components/incomePage/incomeModals/updateIncomeCategoryModal"
 import AddIncomeModal from "@/components/incomePage/incomeModals/addIncomeModal"
-import { setAddIncomeCategoryModalStatus } from '@/store/modal'
+import { setUpdateIncomeCategoryModalStatus, setAddIncomeModalStatus } from '@/store/modal'
 import { FiEdit2 } from 'react-icons/fi'
-import { useState } from 'react'
-import EditIncomeModal from "@/components/incomePage/incomeModals/editIncomeModal"
+import { useState, useEffect } from 'react'
+import { listenForDataUpdates } from "@/app/firebase"
 
 function IncomeContainer() {
     const dispatch = useDispatch()
-    const addIncomeCategoryModalIsActive = useSelector(state => state.modal.addIncomeCategory)
+    const updateIncomeCategoryModalIsActive = useSelector(state => state.modal.updateIncomeCategory)
     const addIncomeModalIsActive = useSelector(state => state.modal.addIncome)
-    const editIncomeModalIsActive = useSelector(state => state.modal.editIncome)
     const [editIsactive, setEditIsActive] = useState(false)
+    const [incomeCategory, setIncomeCategory] = useState()
+    const userId = useSelector(state => state.auth.user.uid)
+    const [editIncomeCategoryId, setEditIncomeCategoryId] = useState()
 
+    
+    useEffect(() => {
+        listenForDataUpdates('user/' + userId + '/incomeCategory', (data) => {
+            setIncomeCategory(data)
+        })
+    }, [])
+    
     const handleAddClick = () => {
-        dispatch(setAddIncomeCategoryModalStatus(!addIncomeCategoryModalIsActive))
+        setEditIncomeCategoryId(null)
+        dispatch(setUpdateIncomeCategoryModalStatus(!updateIncomeCategoryModalIsActive))
     }
 
     const handleEditClick = () => {
         setEditIsActive(!editIsactive)
     }
 
+    const handleIncomeClick = ( categoryId) => {
+        if (editIsactive) {
+            setEditIncomeCategoryId( categoryId )
+            dispatch(setUpdateIncomeCategoryModalStatus(!updateIncomeCategoryModalIsActive))
+        } else {
+            dispatch(setAddIncomeModalStatus(!addIncomeModalIsActive))
+        }
+    }
+
+
     return (
         <div>
-            {(addIncomeCategoryModalIsActive || addIncomeModalIsActive || editIncomeModalIsActive) && <Backdrop />}
-            {addIncomeCategoryModalIsActive && <AddIncomeCategoryModal />}
+            {(updateIncomeCategoryModalIsActive || addIncomeModalIsActive ) && <Backdrop />}
+            {updateIncomeCategoryModalIsActive && <UpdateIncomeCategoryModal categoryId={editIncomeCategoryId} />}
             {addIncomeModalIsActive && <AddIncomeModal />}
-            {editIncomeModalIsActive && <EditIncomeModal />}
             <div className="w-4/12 mx-auto ">
                 <div className="flex justify-end mb-1 gap-2">
                     <FiEdit2 title="Düzəliş et" size={35} className={`text-2xl text-white p-2 rounded cursor-pointer ${editIsactive ? "bg-red-500" : "opacity-40 bg-red-400"} `} onClick={handleEditClick} />
@@ -39,11 +57,12 @@ function IncomeContainer() {
                 </div>
 
                 <div className='grid grid-cols-4 gap-3 '>
-                    <Income editIsactive={editIsactive} />
-                    <Income editIsactive={editIsactive} />
-                    <Income editIsactive={editIsactive} />
-                    <Income editIsactive={editIsactive} />
-                    <Income editIsactive={editIsactive} />
+                {incomeCategory && Object.keys(incomeCategory).map((item, index) => {
+                        return (
+                            <Income key={index} category={incomeCategory[item]} onClick={() => handleIncomeClick(item)} />
+                        )
+                    })}
+
                 </div>
             </div>
         </div>

@@ -2,10 +2,10 @@
 import Backdrop from "@/components/global/backdrop"
 import Expense from "@/components/expensePage"
 import AddExpenseModal from "@/components/expensePage/expenseModals/addExpenseModal"
-import AddExpenseCategoryModal from "@/components/expensePage/expenseModals/addExpenseCategoryModal"
+import UpdateExpenseCategoryModal from "@/components/expensePage/expenseModals/updateExpenseCategoryModal"
 import { MdAddCircle } from 'react-icons/md'
 import { useSelector, useDispatch } from 'react-redux'
-import { setAddExpenseCategoryModalStatus } from '@/store/modal'
+import { setUpdateExpenseCategoryModalStatus } from '@/store/modal'
 import { FiEdit2 } from 'react-icons/fi'
 import { useEffect, useState } from 'react'
 import { listenForDataUpdates } from "@/app/firebase"
@@ -15,7 +15,7 @@ import EditExpenseSubCategoryModal from "@/components/expensePage/expenseModals/
 
 function ExpenseContainer() {
     const addExpenseModalIsActive = useSelector(state => state.modal.addExpense)
-    const addExpenseCategoryModalIsActive = useSelector(state => state.modal.addExpenseCategory)
+    const updateExpenseCategoryModalIsActive = useSelector(state => state.modal.updateExpenseCategory)
     const editExpenseSubCategoryModalIsActive = useSelector(state => state.modal.editExpenseSubCategory)
     const userId = useSelector(state => state.auth.user.uid)
     const [editIsactive, setEditIsActive] = useState(false)
@@ -25,7 +25,7 @@ function ExpenseContainer() {
 
     const handleAddClick = () => {
         setEditExpenseCategoryId(null)
-        dispatch(setAddExpenseCategoryModalStatus(!addExpenseCategoryModalIsActive))
+        dispatch(setUpdateExpenseCategoryModalStatus(!updateExpenseCategoryModalIsActive))
     }
 
     const handleEditClick = () => {
@@ -42,7 +42,7 @@ function ExpenseContainer() {
     const handleExpenseClick = ( categoryId) => {
         if (editIsactive) {
             setEditExpenseCategoryId( categoryId )
-            dispatch(setAddExpenseCategoryModalStatus(!addExpenseCategoryModalIsActive))
+            dispatch(setUpdateExpenseCategoryModalStatus(!updateExpenseCategoryModalIsActive))
         } else {
             dispatch(setAddExpenseModalStatus(!addExpenseModalIsActive))
         }
@@ -51,8 +51,8 @@ function ExpenseContainer() {
 
     return (
         <div >
-            {(addExpenseModalIsActive || addExpenseCategoryModalIsActive || editExpenseSubCategoryModalIsActive) && <Backdrop />}
-            {addExpenseCategoryModalIsActive && <AddExpenseCategoryModal categoryId={editExpenseCategoryId} />}
+            {(addExpenseModalIsActive || updateExpenseCategoryModalIsActive || editExpenseSubCategoryModalIsActive) && <Backdrop />}
+            {updateExpenseCategoryModalIsActive && <UpdateExpenseCategoryModal categoryId={editExpenseCategoryId} />}
             {addExpenseModalIsActive && <AddExpenseModal />}
             {editExpenseSubCategoryModalIsActive && <EditExpenseSubCategoryModal />}
             <div className="w-4/12 mx-auto ">
