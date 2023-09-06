@@ -1,26 +1,10 @@
 import { TbCurrencyManat } from 'react-icons/Tb';
 import { FaWallet } from 'react-icons/fa'
-import { useSelector, useDispatch } from 'react-redux';
-import { setEditAccountModalStatus, setTransferModalStatus } from '@/store/modal';
 import { FaRightLong } from 'react-icons/fa6'
 import { FiEdit2 } from 'react-icons/fi'
 
 
-function Account() {
-
-    const dispatch = useDispatch()
-    const editAccountModalIsActive = useSelector(state => state.modal.editAccount)
-    const transferModalIsActive = useSelector(state => state.modal.transfer)
-
-
-    const handleEditClick = () => {
-        dispatch(setEditAccountModalStatus(!editAccountModalIsActive))
-    }
-
-    const handleTransferClick = () => {
-        dispatch(setTransferModalStatus(!transferModalIsActive))
-    }
-
+function Account({ category, handleEditClick, handleTransferClick }) {
 
     return (
         <div className='flex justify-center'>
@@ -30,12 +14,20 @@ function Account() {
                 </div>
                 <div className='flex flex-col w-1/2'>
                     <div>
-                        <p className='font-medium text-slate-700'>Kapital bank</p>
+                        <p className='font-medium text-slate-700'>{category.name}</p>
                     </div>
                     <div>
-                        <div className='flex items-center text-green-600 font-medium'>
-                            <p>100.00</p>
-                            <TbCurrencyManat />
+                        <div className='flex items-center font-medium gap-3'>
+                            <div className='flex items-center'>
+                                <p className='text-green-600'>{category.balance}</p>
+                                <TbCurrencyManat className='text-green-600' />
+                            </div>
+                            {category.creditLimit !==0 &&
+                                <div className='flex items-center'>
+                                    <p className='text-red-600'>{category.creditLimit}</p>
+                                    <TbCurrencyManat className='text-red-600' />
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

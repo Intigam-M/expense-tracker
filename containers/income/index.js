@@ -19,13 +19,13 @@ function IncomeContainer() {
     const userId = useSelector(state => state.auth.user.uid)
     const [editIncomeCategoryId, setEditIncomeCategoryId] = useState()
 
-    
+
     useEffect(() => {
         listenForDataUpdates('user/' + userId + '/incomeCategory', (data) => {
             setIncomeCategory(data)
         })
     }, [])
-    
+
     const handleAddClick = () => {
         setEditIncomeCategoryId(null)
         dispatch(setUpdateIncomeCategoryModalStatus(!updateIncomeCategoryModalIsActive))
@@ -35,9 +35,9 @@ function IncomeContainer() {
         setEditIsActive(!editIsactive)
     }
 
-    const handleIncomeClick = ( categoryId) => {
+    const handleIncomeClick = (categoryId) => {
         if (editIsactive) {
-            setEditIncomeCategoryId( categoryId )
+            setEditIncomeCategoryId(categoryId)
             dispatch(setUpdateIncomeCategoryModalStatus(!updateIncomeCategoryModalIsActive))
         } else {
             dispatch(setAddIncomeModalStatus(!addIncomeModalIsActive))
@@ -47,7 +47,7 @@ function IncomeContainer() {
 
     return (
         <div>
-            {(updateIncomeCategoryModalIsActive || addIncomeModalIsActive ) && <Backdrop />}
+            {(updateIncomeCategoryModalIsActive || addIncomeModalIsActive) && <Backdrop />}
             {updateIncomeCategoryModalIsActive && <UpdateIncomeCategoryModal categoryId={editIncomeCategoryId} />}
             {addIncomeModalIsActive && <AddIncomeModal />}
             <div className="w-4/12 mx-auto ">
@@ -57,7 +57,7 @@ function IncomeContainer() {
                 </div>
 
                 <div className='grid grid-cols-4 gap-3 '>
-                {incomeCategory && Object.keys(incomeCategory).map((item, index) => {
+                    {incomeCategory && Object.keys(incomeCategory).map((item, index) => {
                         return (
                             <Income key={index} category={incomeCategory[item]} onClick={() => handleIncomeClick(item)} />
                         )
