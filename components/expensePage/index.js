@@ -1,9 +1,23 @@
 'use client'
 import { TbCurrencyManat } from 'react-icons/Tb';
 import * as ReactIcons from 'react-icons/fa';
+import { useEffect, useState } from 'react';
+import { filterTransactionforExpenseCat, totalExpenseCatAmount } from '@/helper'
 
 
-function Expense({ category, onClick }) {
+function Expense({ category, categoryId, transaction, onClick }) {
+
+    const [expenseAmount, setExpenseAmount] = useState()
+
+
+    useEffect(() => {
+
+        const expenseTransaction = filterTransactionforExpenseCat(transaction, categoryId);
+        const expenseAmount = totalExpenseCatAmount(expenseTransaction);
+        setExpenseAmount(expenseAmount)
+
+    }, [transaction])
+
 
     const ExpenseIcon = ReactIcons[category.icon];
 
@@ -20,7 +34,7 @@ function Expense({ category, onClick }) {
                 </div>
                 <div>
                     <div className='flex items-center text-red-600 font-medium'>
-                        <p>100.00</p>
+                        <p>{expenseAmount}</p>
                         <TbCurrencyManat />
                     </div>
                 </div>

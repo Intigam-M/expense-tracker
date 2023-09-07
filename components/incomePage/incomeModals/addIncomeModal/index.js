@@ -3,15 +3,30 @@ import { useEffect, useState } from 'react'
 import { IoCloseSharp } from 'react-icons/io5'
 import { useDispatch, useSelector } from 'react-redux'
 import { setAddIncomeModalStatus } from '@/store/modal'
+import toast from "react-hot-toast";
+import { pushData, getData, listenForDataUpdates } from '@/app/firebase'
 
-function AddincomeModal() {
-    const [amount, setAmount] = useState(0)
+function AddincomeModal({categories, categoryId}) {
+
+    const [amount, setAmount] = useState('')
+    const [selectedCategory, setSelectedCategory] = useState(categoryId)
+    const [accounts, setAccounts] = useState([{}])
+    const [selectedAccount, setSelectedAccount] = useState('')
+    const [currency , setCurrency] = useState('')
     const [note, setNote] = useState('')
     const [date, setDate] = useState('')
+
     const addIncomeModalIsActive = useSelector(state => state.modal.addIncome)
+    const userId = useSelector(state => state.auth.user.uid)
     const dispatch = useDispatch()
 
     useEffect(() => {
+
+        listenForDataUpdates('user/' + userId + '/account', (data) => {
+            setAccounts(data)
+        })
+
+
         const currentDate = new Date();
         const formattedDate = currentDate.toISOString().substr(0, 10);
         setDate(formattedDate);
@@ -19,6 +34,33 @@ function AddincomeModal() {
 
     const closeModal = () => {
         dispatch(setAddIncomeModalStatus(!addIncomeModalIsActive))
+    }
+
+    const handleSelectAccount = (e) => {
+        setSelectedAccount(e.target.value)
+        async function  getCurrency() {
+            const data = await getData('user/' + userId + '/account/' + e.target.value)
+            setCurrency(data.currency)
+        }
+        getCurrency()
+    }
+
+
+    const handleAddIncome = () => {
+        if(amount=='' || selectedAccount =='' ) return toast.error('Məlumatları tam doldurun')
+        const incomeData = {
+            amount: amount,
+            account: selectedAccount,
+            category: selectedCategory,
+            transactionType: 1,
+            currency: currency,
+            note: note,
+            date: date
+        }
+        pushData(incomeData, 'user/' + userId + '/transaction')
+        toast.success('Gəlir əlavə edildi')
+        dispatch(setAddIncomeModalStatus(!addIncomeModalIsActive))
+
     }
 
 
@@ -34,24 +76,34 @@ function AddincomeModal() {
                 <div className='grid grid-cols-2'>
                     <div className='p-3 bg-red-500 text-white rounded-tl rounded-bl'>
                         <p className='text-xs pl-1'>Kateqoriyadan:</p>
-                        <select defaultValue={'DEFAULT'} className="bg-red-500 text-white text-xl font-medium  block w-full border-none focus:outline-none">
-                            <option value="DEFAULT">Maas</option>
-                            <option value="CA">Biznes</option>
-                            <option value="FR">Diger</option>
+                        <select value={selectedCategory} onChange={(e)=>{setSelectedCategory(e.target.value)}} className="bg-red-500 text-white text-xl font-medium block w-full border-none focus:outline-none">
+                         {
+                            categories && Object.keys(categories).map((category, index) => {
+                                return (
+                                    <option key={index} value={category}>{categories[category].name}</option>
+                                )
+                            })
+                         }
                         </select>
+
                     </div>
                     <div className='p-3 bg-blue-500 text-white rounded-tr rounded-br'>
                         <p className='text-xs pl-1'>Hesaba:</p>
-                        <select defaultValue={'DEFAULT'} className="bg-blue-500 text-white text-xl font-medium block w-full border-none focus:outline-none">
-                            <option value="DEFAULT">Kapital</option>
-                            <option value="CA">Xalq</option>
-                            <option value="FR">Nagd</option>
+                        <select value={selectedAccount} onChange={handleSelectAccount} className="bg-blue-500 text-white text-xl font-medium  block w-full border-none focus:outline-none">
+                            <option value=''>Hesab seçin</option>
+                            {
+                                accounts && Object.keys(accounts).map((account, index) => {
+                                    return (
+                                        <option key={index} value={account}>{accounts[account].name}</option>
+                                    )
+                                })
+                            }
                         </select>
 
                     </div>
                 </div>
                 <div>
-                    <form className='mt-5'>
+                    <div className='mt-5'>
                         <p className='text-sm text-slate-500'>Məbləğ gəlir</p>
                         <input type="number" className='p-1.5 border rounded w-full' value={amount} onChange={e => setAmount(e.target.value)} />
 
@@ -61,8 +113,10 @@ function AddincomeModal() {
                         <p className='text-sm text-slate-500'>Tarix</p>
                         <input type="date" className='p-1.5 border rounded w-full' value={date} onChange={e => setDate(e.target.value)} />
 
-                        <button className=' py-2 w-full bg-green-500 rounded mt-5 text-white font-bold'>Daxil et</button>
-                    </form>
+                        <button className=' py-2 w-full bg-green-500 rounded mt-5 text-white font-bold'
+                              onClick={handleAddIncome}
+                        >Daxil et</button>
+                    </div>
                 </div>
             </div>
         </div>

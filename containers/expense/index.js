@@ -19,8 +19,10 @@ function ExpenseContainer() {
     const editExpenseSubCategoryModalIsActive = useSelector(state => state.modal.editExpenseSubCategory)
     const userId = useSelector(state => state.auth.user.uid)
     const [editIsactive, setEditIsActive] = useState(false)
-    const [expenseCategory, setExpenseCategory] = useState()
-    const [editExpenseCategoryId, setEditExpenseCategoryId] = useState()
+    const [expenseCategory, setExpenseCategory] = useState('')
+    const [editExpenseCategoryId, setEditExpenseCategoryId] = useState('')
+    const [transaction, setTransaction] = useState('')
+
     const dispatch = useDispatch()
 
     const handleAddClick = () => {
@@ -36,12 +38,18 @@ function ExpenseContainer() {
         listenForDataUpdates('user/' + userId + '/expenseCategory', (data) => {
             setExpenseCategory(data)
         })
+
+
+        listenForDataUpdates('user/' + userId + '/transaction', (data) => {
+            setTransaction(data)
+        })
+
     }, [])
 
 
-    const handleExpenseClick = ( categoryId) => {
+    const handleExpenseClick = (categoryId) => {
+        setEditExpenseCategoryId(categoryId)
         if (editIsactive) {
-            setEditExpenseCategoryId( categoryId )
             dispatch(setUpdateExpenseCategoryModalStatus(!updateExpenseCategoryModalIsActive))
         } else {
             dispatch(setAddExpenseModalStatus(!addExpenseModalIsActive))
@@ -53,7 +61,7 @@ function ExpenseContainer() {
         <div >
             {(addExpenseModalIsActive || updateExpenseCategoryModalIsActive || editExpenseSubCategoryModalIsActive) && <Backdrop />}
             {updateExpenseCategoryModalIsActive && <UpdateExpenseCategoryModal categoryId={editExpenseCategoryId} />}
-            {addExpenseModalIsActive && <AddExpenseModal />}
+            {addExpenseModalIsActive && <AddExpenseModal categories={expenseCategory} categoryId={editExpenseCategoryId} />}
             {editExpenseSubCategoryModalIsActive && <EditExpenseSubCategoryModal />}
             <div className="w-4/12 mx-auto ">
                 <div className="flex justify-end mb-1 gap-2">
@@ -63,7 +71,7 @@ function ExpenseContainer() {
                 <div className='grid grid-cols-4 gap-3 '>
                     {expenseCategory && Object.keys(expenseCategory).map((item, index) => {
                         return (
-                            <Expense key={index} category={expenseCategory[item]} onClick={() => handleExpenseClick(item)} />
+                            <Expense key={index} category={expenseCategory[item]} categoryId={item} transaction={transaction} onClick={() => handleExpenseClick(item)} />
                         )
                     })}
                 </div>

@@ -10,8 +10,8 @@ import toast from "react-hot-toast";
 function UpdateAccountModal({ categoryId }) {
     const [name, setName] = useState('')
     const [accountType, setAccountType] = useState('')
-    const [balance, setBalance] = useState(0)
-    const [creditLimit, setCreditLimit] = useState(0)
+    const [balance, setBalance] = useState('')
+    const [creditLimit, setCreditLimit] = useState('')
     const [selectedType, setSelectedType] = useState(1)
     const [balanceImpact, setBalanceImpact] = useState(true)
     const [description, setDescription] = useState('')

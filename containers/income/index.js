@@ -36,8 +36,8 @@ function IncomeContainer() {
     }
 
     const handleIncomeClick = (categoryId) => {
+        setEditIncomeCategoryId(categoryId)
         if (editIsactive) {
-            setEditIncomeCategoryId(categoryId)
             dispatch(setUpdateIncomeCategoryModalStatus(!updateIncomeCategoryModalIsActive))
         } else {
             dispatch(setAddIncomeModalStatus(!addIncomeModalIsActive))
@@ -49,7 +49,7 @@ function IncomeContainer() {
         <div>
             {(updateIncomeCategoryModalIsActive || addIncomeModalIsActive) && <Backdrop />}
             {updateIncomeCategoryModalIsActive && <UpdateIncomeCategoryModal categoryId={editIncomeCategoryId} />}
-            {addIncomeModalIsActive && <AddIncomeModal />}
+            {addIncomeModalIsActive && <AddIncomeModal categories={incomeCategory} categoryId={editIncomeCategoryId} />}
             <div className="w-4/12 mx-auto ">
                 <div className="flex justify-end mb-1 gap-2">
                     <FiEdit2 title="Düzəliş et" size={35} className={`text-2xl text-white p-2 rounded cursor-pointer ${editIsactive ? "bg-red-500" : "opacity-40 bg-red-400"} `} onClick={handleEditClick} />

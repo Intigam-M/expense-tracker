@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setTransferModalStatus } from '@/store/modal'
 
 function TransferModal() {
-    const [amount, setAmount] = useState(0)
+    const [amount, setAmount] = useState('')
     const [note, setNote] = useState('')
     const [date, setDate] = useState('')
     const transferModalIsActive = useSelector(state => state.modal.transfer)
