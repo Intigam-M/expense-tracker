@@ -1,10 +1,10 @@
-export function filterTransactionforExpenseCat(obj, categoryId) {
+export function filterTransactionforExpenseCat(obj, categoryId, type) {
     const filteredTransactions = {};
   
     for (const key in obj) {
       const transaction = obj[key];
   
-      if (transaction.transactionType === 2 && transaction.category === categoryId) {
+      if (transaction.transactionType === type && transaction.category === categoryId) {
         filteredTransactions[key] = transaction;
       }
     }

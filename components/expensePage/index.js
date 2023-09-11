@@ -12,7 +12,7 @@ function Expense({ category, categoryId, transaction, onClick }) {
 
     useEffect(() => {
 
-        const expenseTransaction = filterTransactionforExpenseCat(transaction, categoryId);
+        const expenseTransaction = filterTransactionforExpenseCat(transaction, categoryId, 2);
         const expenseAmount = totalExpenseCatAmount(expenseTransaction);
         setExpenseAmount(expenseAmount)
 

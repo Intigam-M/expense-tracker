@@ -18,12 +18,19 @@ function IncomeContainer() {
     const [incomeCategory, setIncomeCategory] = useState()
     const userId = useSelector(state => state.auth.user.uid)
     const [editIncomeCategoryId, setEditIncomeCategoryId] = useState()
+    const [transaction, setTransaction] = useState('')
 
 
     useEffect(() => {
         listenForDataUpdates('user/' + userId + '/incomeCategory', (data) => {
             setIncomeCategory(data)
         })
+
+
+        listenForDataUpdates('user/' + userId + '/transaction', (data) => {
+            setTransaction(data)
+        })
+
     }, [])
 
     const handleAddClick = () => {
@@ -59,7 +66,7 @@ function IncomeContainer() {
                 <div className='grid grid-cols-4 gap-3 '>
                     {incomeCategory && Object.keys(incomeCategory).map((item, index) => {
                         return (
-                            <Income key={index} category={incomeCategory[item]} onClick={() => handleIncomeClick(item)} />
+                            <Income key={index} category={incomeCategory[item]} categoryId={item} transaction={transaction} onClick={() => handleIncomeClick(item)} />
                         )
                     })}
 
