@@ -16,6 +16,7 @@ function AccountContainer() {
     const [editAccountCategoryId, setEditAccountCategoryId] = useState()
     const [transferAccountCategoryId, setTransferAccountCategoryId] = useState()
     const [accountCategory, setAccountCategory] = useState()
+    const [transaction, setTransaction] = useState('')
     const userId = useSelector(state => state.auth.user.uid)
     const dispatch = useDispatch()
 
@@ -23,6 +24,9 @@ function AccountContainer() {
     useEffect(() => {
         listenForDataUpdates('user/' + userId + '/account', (data) => {
             setAccountCategory(data)
+        })
+        listenForDataUpdates('user/' + userId + '/transaction', (data) => {
+            setTransaction(data)
         })
     }, [])
 
@@ -48,7 +52,7 @@ function AccountContainer() {
         <div>
             {(updateAccountModalIsActive || transferModalIsActive) && <Backdrop />}
             {updateAccountModalIsActive && <UpdateAccountModal categoryId={editAccountCategoryId} />}
-            {transferModalIsActive && <TransferModal categoryId={transferAccountCategoryId} />}
+            {transferModalIsActive && <TransferModal accounts={accountCategory} categoryId={transferAccountCategoryId} />}
 
             <div className='flex flex-col gap-4'>
 
@@ -57,6 +61,8 @@ function AccountContainer() {
                         <Account
                             key={index}
                             category={accountCategory[item]}
+                            categoryId={item}
+                            transaction={transaction} 
                             handleEditClick={() => handleEditClick(item)}
                             handleTransferClick={() => handleTransferClick(item)} />
                     )

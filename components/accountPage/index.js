@@ -1,16 +1,56 @@
 import { TbCurrencyManat } from 'react-icons/Tb';
-import { FaWallet } from 'react-icons/fa'
+import * as ReactIcons from 'react-icons/fa';
 import { FaRightLong } from 'react-icons/fa6'
 import { FiEdit2 } from 'react-icons/fi'
+import { useEffect, useState } from 'react';
+import { updateData } from '@/app/firebase'
+import { useSelector } from 'react-redux';
 
 
-function Account({ category, handleEditClick, handleTransferClick }) {
+function Account({ category, categoryId, transaction, handleEditClick, handleTransferClick }) {
+
+    const [categoryBalance, setCategoryBalance] = useState(0)
+    const userId = useSelector(state => state.auth.user.uid)
+    const AccountIcon = ReactIcons[category.icon];
+
+
+    const IconBackground = {
+        backgroundColor: category.color
+    };
+
+    useEffect(() => {
+        let balance = Number(category.balance)
+        transaction && Object.keys(transaction).map((item, index) => {
+            if (transaction[item].account === categoryId) {
+
+                if (transaction[item].transactionType === 1) {
+                    balance += Number(Number(transaction[item].amount))
+                } else if (transaction[item].transactionType === 2) {
+                    balance -= Number(transaction[item].amount)
+                } else if (transaction[item].transactionType === 3) {
+                    balance -= Number(transaction[item].amount)
+                }
+            }
+
+            if (transaction[item].category == categoryId && transaction[item].transactionType === 3) {
+                balance += Number(transaction[item].amount)
+            }
+
+        })
+        setCategoryBalance(balance)
+
+        if(balance !== category.balance){
+            updateData({balance: balance}, 'user/' + userId + '/account/' + categoryId)
+        }
+
+    }, [transaction])
+
 
     return (
         <div className='flex justify-center'>
             <div className='w-4/12 flex gap-3 items-center border border-slate-300 shadow p-2 bg-slate-100 rounded'>
                 <div>
-                    <FaWallet className='text-5xl text-white p-3 bg-sky-800 rounded' />
+                    <AccountIcon className='text-5xl text-white p-3 rounded' style={IconBackground} />
                 </div>
                 <div className='flex flex-col w-1/2'>
                     <div>
@@ -19,10 +59,10 @@ function Account({ category, handleEditClick, handleTransferClick }) {
                     <div>
                         <div className='flex items-center font-medium gap-3'>
                             <div className='flex items-center'>
-                                <p className='text-green-600'>{category.balance}</p>
+                                <p className='text-green-600'>{categoryBalance}</p>
                                 <TbCurrencyManat className='text-green-600' />
                             </div>
-                            {category.creditLimit !==0 &&
+                            {category.creditLimit !== 0 &&
                                 <div className='flex items-center'>
                                     <p className='text-red-600'>{category.creditLimit}</p>
                                     <TbCurrencyManat className='text-red-600' />

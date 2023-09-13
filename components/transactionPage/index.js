@@ -27,6 +27,10 @@ function Transaction({ transaction }) {
             listenForDataUpdates('user/' + userId + '/expenseCategory/' + transaction.category, (data) => {
                 setCategory(data)
             })
+        }else if (transaction.transactionType == 3) {
+            listenForDataUpdates('user/' + userId + '/account/' + transaction.category, (data) => {
+                setCategory(data)
+            })
         }
 
 
