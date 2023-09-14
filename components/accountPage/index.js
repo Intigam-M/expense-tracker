@@ -19,10 +19,10 @@ function Account({ category, categoryId, transaction, handleEditClick, handleTra
     };
 
     useEffect(() => {
-        let balance = Number(category.balance)
+        let balance = Number(category.initialBalance)
+
         transaction && Object.keys(transaction).map((item, index) => {
             if (transaction[item].account === categoryId) {
-
                 if (transaction[item].transactionType === 1) {
                     balance += Number(Number(transaction[item].amount))
                 } else if (transaction[item].transactionType === 2) {
@@ -39,8 +39,8 @@ function Account({ category, categoryId, transaction, handleEditClick, handleTra
         })
         setCategoryBalance(balance)
 
-        if(balance !== category.balance){
-            updateData({balance: balance}, 'user/' + userId + '/account/' + categoryId)
+        if (balance != category.balance) {
+            updateData({ balance: balance }, 'user/' + userId + '/account/' + categoryId)
         }
 
     }, [transaction])

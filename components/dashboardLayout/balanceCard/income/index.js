@@ -1,7 +1,7 @@
 import { AiOutlineArrowDown } from 'react-icons/Ai';
 import { TbCurrencyManat } from 'react-icons/Tb';
 
-function Income() {
+function Income({income}) {
     return (
         <div className='flex gap-2 items-center'>
             <div>
@@ -10,7 +10,7 @@ function Income() {
             <div className='flex flex-col'>
                 <p className='text-slate-200'>Income</p>
                 <div className='flex text-white'>
-                    <p >250.00</p>
+                    <p >{income}</p>
                     <TbCurrencyManat size={20} />
                 </div>
             </div>

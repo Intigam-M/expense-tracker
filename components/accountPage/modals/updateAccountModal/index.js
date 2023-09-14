@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { IoCloseSharp } from 'react-icons/io5'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUpdateAccountModalStatus } from '@/store/modal'
-import { pushData, updateData, listenForDataUpdates, deleteData } from '@/app/firebase'
+import { pushData, updateData, listenForDataUpdates, deleteData, getData } from '@/app/firebase'
 import toast from "react-hot-toast";
 import { accountIconList } from "@/lib/icon"
 import IconWithProps from '@/components/global/IconWithProps'
@@ -62,7 +62,8 @@ function UpdateAccountModal({ categoryId }) {
         const newCategory = {
             name: name,
             type: selectedType,
-            balance: balance,
+            initialBalance: balance,
+            balance: 0,
             creditLimit: creditLimit,
             description: description,
             balanceImpact: balanceImpact,
@@ -72,6 +73,12 @@ function UpdateAccountModal({ categoryId }) {
         };
 
         if (categoryId) {
+
+            const oldCategoryBalance = await getData('user/' + userId + '/account/' + categoryId)
+            const newIntialBalance = Number(oldCategoryBalance.initialBalance) + (Number(balance) - Number(oldCategoryBalance.balance))
+            newCategory.initialBalance = newIntialBalance
+
+
             updateData(newCategory, 'user/' + userId + '/account/' + categoryId)
         } else {
             pushData(newCategory, 'user/' + userId + '/account')

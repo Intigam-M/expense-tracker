@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import * as ReactIcons from 'react-icons/fa';
 
 
-function Transaction({ transaction }) {
+function Transaction({ transaction, onClick }) {
 
     const [account, setAccount] = useState('')
     const [category, setCategory] = useState('')
@@ -34,7 +34,7 @@ function Transaction({ transaction }) {
         }
 
 
-    }, [])
+    }, [transaction])
 
     const divStyle = {
         backgroundColor: category?.color
@@ -42,7 +42,7 @@ function Transaction({ transaction }) {
 
 
     return (
-        <div>
+        <div className='cursor-pointer' onClick={onClick}>
             <div className='flex justify-center'>
                 <div className='w-full border'>
                     <div className='w-full rounded-lg px-5 py-2 bg-white flex justify-between items-center'>
