@@ -1,10 +1,12 @@
-export function filterTransactionforExpenseCat(obj, categoryId, type) {
+export function filterTransactionforCategory(obj, categoryId, type, date) {
     const filteredTransactions = {};
   
     for (const key in obj) {
       const transaction = obj[key];
   
-      if (transaction.transactionType === type && transaction.category === categoryId) {
+      if (transaction.transactionType === type && transaction.category === categoryId && 
+        new Date(transaction.date).getMonth() === date.month && 
+        new Date(transaction.date).getFullYear() === date.year) {
         filteredTransactions[key] = transaction;
       }
     }
@@ -13,7 +15,7 @@ export function filterTransactionforExpenseCat(obj, categoryId, type) {
   }
 
 
-  export function totalExpenseCatAmount(filteredObj) {
+  export function totalCategoryAmount(filteredObj) {
     let totalAmount = 0;
   
     for (const key in filteredObj) {

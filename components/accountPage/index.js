@@ -43,7 +43,7 @@ function Account({ category, categoryId, transaction, handleEditClick, handleTra
             updateData({ balance: balance }, 'user/' + userId + '/account/' + categoryId)
         }
 
-    }, [transaction])
+    }, [transaction, category])
 
 
     return (

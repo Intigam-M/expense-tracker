@@ -6,8 +6,9 @@ import { logout } from '@/app/firebase'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { removeUser } from '@/store/auth'
+import { MdLogout } from 'react-icons/md'
 
-function Header() {
+function Navigator() {
 
     const { user } = useSelector(state => state.auth)
     const router = useRouter()
@@ -24,11 +25,13 @@ function Header() {
         }
     }, [user]);
     return (
-        <div>
-            Header
-            <button onClick={handleLogout} className='p-2 bg-blue-500 text-white rounded'>Logout</button>
-        </div>
+        <nav className='pl-6'>
+            <div className='flex items-center'>
+                <MdLogout className='text-white' size={20} />
+                <button onClick={handleLogout} className='p-2 text-white font-medium rounded'>Logout</button>
+            </div>
+        </nav>
     )
 }
 
-export default Header
+export default Navigator

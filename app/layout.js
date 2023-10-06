@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google'
 import { Toaster } from 'react-hot-toast';
 import dotenv from 'dotenv';
 import { StoreProvider } from '@/store/StoreProvider';
+import Sidebar from '@/components/sidebar';
+
 dotenv.config();
 
 const inter = Inter({ subsets: ['latin'] })
@@ -18,7 +20,10 @@ export default function RootLayout({ children }) {
             <html lang="en">
                 <body className={`${inter.className} bg-slate-200`}>
                     <Toaster position='top-right' />
-                    <main> {children} </main>
+                    <div className='flex h-screen'>
+                        <Sidebar />
+                        <main className='flex-1 bg-slate-200 py-8'> {children} </main>
+                    </div>
                 </body>
             </html>
         </StoreProvider>

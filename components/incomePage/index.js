@@ -1,22 +1,24 @@
 'use client'
 import { TbCurrencyManat } from 'react-icons/Tb';
 import * as ReactIcons from 'react-icons/fa';
-import { filterTransactionforExpenseCat, totalExpenseCatAmount } from '@/helper'
+import { filterTransactionforCategory, totalCategoryAmount } from '@/helper'
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 
 function Income({ category, categoryId, transaction, onClick }) {
 
     const [incomeAmount, setIncomeAmount] = useState()
+    const date = useSelector(state => state.date)
 
 
     useEffect(() => {
 
-        const incomeTransaction = filterTransactionforExpenseCat(transaction, categoryId, 1);
-        const incomeAmount = totalExpenseCatAmount(incomeTransaction);
+        const incomeTransaction = filterTransactionforCategory(transaction, categoryId, 1, date);
+        const incomeAmount = totalCategoryAmount(incomeTransaction);
         setIncomeAmount(incomeAmount)
 
-    }, [transaction])
+    }, [transaction, date])
 
 
 

@@ -2,21 +2,23 @@
 import { TbCurrencyManat } from 'react-icons/Tb';
 import * as ReactIcons from 'react-icons/fa';
 import { useEffect, useState } from 'react';
-import { filterTransactionforExpenseCat, totalExpenseCatAmount } from '@/helper'
+import { filterTransactionforCategory, totalCategoryAmount } from '@/helper'
+import { useSelector } from 'react-redux';
 
 
 function Expense({ category, categoryId, transaction, onClick }) {
 
     const [expenseAmount, setExpenseAmount] = useState()
+    const date = useSelector(state => state.date)
 
 
     useEffect(() => {
 
-        const expenseTransaction = filterTransactionforExpenseCat(transaction, categoryId, 2);
-        const expenseAmount = totalExpenseCatAmount(expenseTransaction);
+        const expenseTransaction = filterTransactionforCategory(transaction, categoryId, 2, date);
+        const expenseAmount = totalCategoryAmount(expenseTransaction);
         setExpenseAmount(expenseAmount)
 
-    }, [transaction])
+    }, [transaction, date])
 
 
     const ExpenseIcon = ReactIcons[category.icon];

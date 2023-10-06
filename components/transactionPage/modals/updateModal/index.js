@@ -13,10 +13,12 @@ function UpdateTransactionModal({ transactionId, transactions }) {
     const [expenseOrIncomeCategory, setExpenseOrIncomeCategory] = useState('')
     const [selectedExpenseOrIncome, setSelectedExpenseOrIncome] = useState(transactions[transactionId].category)
 
+    const [selectedTransferAccount, setSelectedTransferAccount] = useState(transactions[transactionId].category)
+
     const [accountCategory, setAccountCategory] = useState()
     const [selectedAccount, setSelectedAccount] = useState(transactions[transactionId].account)
-    const [subCategories, setSubCategories] = useState(transactions[transactionId].subCategory)
-    const [selectedSubCategory, setSelectedSubCategory] = useState('')
+    const [subCategories, setSubCategories] = useState()
+    const [selectedSubCategory, setSelectedSubCategory] = useState(transactions[transactionId].subCategory)
     const [currency, setCurrency] = useState(transactions[transactionId].currency)
     const [note, setNote] = useState(transactions[transactionId].note)
     const [date, setDate] = useState(transactions[transactionId].date)
@@ -25,18 +27,21 @@ function UpdateTransactionModal({ transactionId, transactions }) {
     const [transactionType, setTransactionType] = useState(transactions[transactionId].transactionType)
     const dispatch = useDispatch()
 
-    console.log(transactions[transactionId].subCategory)
-
     useEffect(() => {
         listenForDataUpdates('user/' + userId + '/account', (data) => {
             setAccountCategory(data)
         })
 
-
         if (transactionType == 2) {
             listenForDataUpdates('user/' + userId + '/expenseCategory', (data) => {
                 setExpenseOrIncomeCategory(data)
             })
+
+            listenForDataUpdates('user/' + userId + '/expenseCategory/' + selectedExpenseOrIncome + '/subCategory', (data) => {
+                setSubCategories(data)
+            })
+
+
         } else if (transactionType == 1) {
 
             listenForDataUpdates('user/' + userId + '/incomeCategory', (data) => {
@@ -51,6 +56,12 @@ function UpdateTransactionModal({ transactionId, transactions }) {
         dispatch(setUpdateTransactionModalStatus(!updateTransactionModalIsActive))
     }
 
+
+    const selectSubcategory = (id) => {
+        if (selectedSubCategory == id) return (setSelectedSubCategory(''))
+        setSelectedSubCategory(id)
+    }
+
     const updateTransaction = async () => {
 
         if (amount == '') {
@@ -60,9 +71,9 @@ function UpdateTransactionModal({ transactionId, transactions }) {
 
         const newTransactionData = {
             amount: amount,
-            category: selectedExpenseOrIncome,
+            category: transactionType == 3 ? selectedTransferAccount : selectedExpenseOrIncome,
             account: selectedAccount,
-            subCategory: selectedSubCategory,
+            subCategory: selectedSubCategory ? selectedSubCategory : '',
             note: note,
             date: date,
             currency: currency
@@ -82,6 +93,10 @@ function UpdateTransactionModal({ transactionId, transactions }) {
 
 
     const handleSelectAccount = (e) => {
+        if (transactionType == 3) {
+            setSelectedTransferAccount(e.target.value)
+            return
+        }
         setSelectedAccount(e.target.value)
         async function getCurrency() {
             const data = await getData('user/' + userId + '/account/' + e.target.value)
@@ -124,15 +139,31 @@ function UpdateTransactionModal({ transactionId, transactions }) {
                                 transactionType == 1 ? 'Kateqoriyadan:' : transactionType == 2 ? 'Kateqoriyaya:' : 'Alan hesab:'
                             }
                         </p>
-                        <select value={selectedExpenseOrIncome} onChange={(e) => { setSelectedExpenseOrIncome(e.target.value) }} className="bg-blue-500 text-white text-xl font-medium block w-full border-none focus:outline-none">
-                            {
-                                expenseOrIncomeCategory && Object.keys(expenseOrIncomeCategory).map((category, index) => {
-                                    return (
-                                        <option key={index} value={category}>{expenseOrIncomeCategory[category].name}</option>
-                                    )
-                                })
-                            }
-                        </select>
+
+
+                        {transactionType !== 3 ?
+
+                            <select value={selectedExpenseOrIncome} onChange={(e) => { setSelectedExpenseOrIncome(e.target.value) }} className="bg-blue-500 text-white text-xl font-medium block w-full border-none focus:outline-none">
+                                {
+                                    expenseOrIncomeCategory && Object.keys(expenseOrIncomeCategory).map((category, index) => {
+                                        return (
+                                            <option key={index} value={category}>{expenseOrIncomeCategory[category].name}</option>
+                                        )
+                                    })
+                                }
+                            </select>
+                            :
+                            <select value={selectedTransferAccount} onChange={handleSelectAccount} className="bg-blue-500 text-white text-xl font-medium  block w-full border-none focus:outline-none">
+                                {
+                                    accountCategory && Object.keys(accountCategory).map((account, index) => {
+                                        return (
+                                            <option key={index} value={account}>{accountCategory[account].name}</option>
+                                        )
+                                    })
+                                }
+                            </select>
+
+                        }
                     </div>
 
 
