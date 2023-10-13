@@ -1,7 +1,7 @@
 import { TbCurrencyManat } from 'react-icons/Tb';
 import * as ReactIcons from 'react-icons/fa';
 import { FaRightLong } from 'react-icons/fa6'
-import { FiEdit2 } from 'react-icons/fi'
+import { FiEdit2 } from 'react-icons/Fi'
 import { useEffect, useState } from 'react';
 import { updateData } from '@/app/firebase'
 import { useSelector } from 'react-redux';

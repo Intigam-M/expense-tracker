@@ -6,7 +6,7 @@ import UpdateExpenseCategoryModal from "@/components/expensePage/expenseModals/u
 import { MdAddCircle } from 'react-icons/md'
 import { useSelector, useDispatch } from 'react-redux'
 import { setUpdateExpenseCategoryModalStatus } from '@/store/modal'
-import { FiEdit2 } from 'react-icons/fi'
+import { FiEdit2 } from 'react-icons/Fi'
 import { useEffect, useState } from 'react'
 import { listenForDataUpdates } from "@/app/firebase"
 import { setAddExpenseModalStatus } from '@/store/modal'

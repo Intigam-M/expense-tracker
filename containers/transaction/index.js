@@ -7,7 +7,6 @@ import { setUpdateTransactionModalStatus, setFilterTransactionModalStatus } from
 import Backdrop from "@/components/global/backdrop"
 import UpdateTransactionModal from '@/components/transactionPage/modals/updateModal';
 import FilterTransactionModal from '@/components/transactionPage/modals/filterModal';
-import { GiSettingsKnobs } from 'react-icons/gi'
 import { VscSettings } from 'react-icons/vsc'
 function TransactionContainer() {
 
@@ -17,22 +16,28 @@ function TransactionContainer() {
     const filterTransactionModalIsActive = useSelector(state => state.modal.filterTransaction)
     const [editTransactionId, setEditTransactionId] = useState()
     const date = useSelector(state => state.date)
+    const filter = useSelector(state => state.filter.filterData)
     const dispatch = useDispatch()
 
 
     useEffect(() => {
+        const startDate = new Date(date.startDate).setHours(0, 0, 0)
+        const endDate = new Date(date.endDate).setHours(23, 59, 59)
+        
         listenForDataUpdates('user/' + userId + '/transaction', (data) => {
             if (!data) return
+            const filteredData = {}
             Object.keys(data).map((transaction) => {
-                if (new Date(data[transaction].date).getMonth() !== date.month ||
-                    new Date(data[transaction].date).getFullYear() !== date.year) {
-                    delete data[transaction]
+
+                const transactionDate = new Date(data[transaction].date)
+                
+                if(transactionDate >= startDate && transactionDate <= endDate){
+                    filteredData[transaction] = data[transaction]
                 }
             })
-
-            setTransactions(data)
+            setTransactions(filteredData)
         })
-    }, [date])
+    }, [date, filter])
 
 
     const handleTransactionClick = (transaction) => {

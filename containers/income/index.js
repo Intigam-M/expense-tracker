@@ -6,7 +6,7 @@ import Backdrop from "@/components/global/backdrop"
 import UpdateIncomeCategoryModal from "@/components/incomePage/incomeModals/updateIncomeCategoryModal"
 import AddIncomeModal from "@/components/incomePage/incomeModals/addIncomeModal"
 import { setUpdateIncomeCategoryModalStatus, setAddIncomeModalStatus } from '@/store/modal'
-import { FiEdit2 } from 'react-icons/fi'
+import { FiEdit2 } from 'react-icons/Fi'
 import { useState, useEffect } from 'react'
 import { listenForDataUpdates } from "@/app/firebase"
 

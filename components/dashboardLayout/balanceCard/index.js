@@ -6,7 +6,7 @@ import { listenForDataUpdates } from "@/app/firebase"
 import { TbCurrencyManat } from 'react-icons/Tb';
 import { FaChevronLeft } from 'react-icons/fa'
 import { FaChevronRight } from 'react-icons/fa'
-import { setMonth, setYear } from '@/store/date';
+import { setStartDate, setEndDate } from '@/store/date';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -16,21 +16,20 @@ function BalanceCard() {
     const [expense, setExpense] = useState(0)
     const [balance, setBalance] = useState(0)
     const userId = useSelector(state => state.auth.user.uid)
-
     const date = useSelector(state => state.date)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
+        const startDate = new Date(date.startDate).setHours(0, 0, 0)
+        const endDate = new Date(date.endDate).setHours(23, 59, 59)
         listenForDataUpdates('user/' + userId + '/transaction', (data) => {
             let income = 0
             let expense = 0
             for (let key in data) {
-                if (data[key].transactionType === 1 && new Date(data[key].date).getMonth() === date.month &&
-                    new Date(data[key].date).getFullYear() === date.year) {
+                if (data[key].transactionType === 1 && new Date(data[key].date) >= startDate && new Date(data[key].date) <= endDate) {
                     income += parseInt(data[key].amount)
-                } else if (data[key].transactionType === 2 && new Date(data[key].date).getMonth() === date.month &&
-                    new Date(data[key].date).getFullYear() === date.year) {
+                } else if (data[key].transactionType === 2 && new Date(data[key].date) >= startDate && new Date(data[key].date) <= endDate) {
                     expense += parseInt(data[key].amount)
                 }
             }
@@ -52,21 +51,26 @@ function BalanceCard() {
 
 
     const previousMonth = () => {
-        if (date.month === 0) {
-            dispatch(setMonth(11))
-            dispatch(setYear(date.year - 1))
-        } else {
-            dispatch(setMonth(date.month - 1))
-        }
+        const startDate = new Date(date.startDate)
+        const endDate = new Date(date.endDate)
+        
+        startDate.setMonth(startDate.getMonth() - 1)
+        startDate.setDate(1)
+        endDate.setMonth(endDate.getMonth(), 0)
+        
+        dispatch(setStartDate(startDate))
+        dispatch(setEndDate(endDate))
     }
 
     const nextMonth = () => {
-        if (date.month === 11) {
-            dispatch(setMonth(0))
-            dispatch(setYear(date.year + 1))
-        } else {
-            dispatch(setMonth(date.month + 1))
-        }
+        const startDate = new Date(date.startDate)
+        const endDate = new Date(date.endDate)
+        
+        startDate.setMonth(startDate.getMonth() + 1)
+        endDate.setMonth(endDate.getMonth() + 2, 0)
+
+        dispatch(setStartDate(startDate))
+        dispatch(setEndDate(endDate))
     }
 
 
@@ -83,12 +87,10 @@ function BalanceCard() {
                             <p>{balance}</p>
                             <TbCurrencyManat />
                         </div>
-
                         <FaChevronRight onClick={nextMonth} className='cursor-pointer' />
                     </div>
                     <div className='flex w-full justify-between'>
                         <Income income={income} />
-                        <p className='font-medium text-white'>{date.month < 9 ? "0" + (date.month + 1) : (date.month + 1)} / {date.year}</p>
                         <Expense expense={expense} />
                     </div>
                 </div>

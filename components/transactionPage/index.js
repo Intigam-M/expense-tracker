@@ -72,7 +72,7 @@ function Transaction({ transaction, onClick }) {
                                 }
                             </div>
                             <div>
-                                <p className='text-stone-400'>{transaction.date}</p>
+                                <p className='text-stone-400'>{new Date(transaction.date).toLocaleDateString('tr-TR')}</p>
                             </div>
                         </div>
                     </div>

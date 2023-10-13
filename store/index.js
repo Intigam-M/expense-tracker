@@ -1,6 +1,7 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import auth from "./auth";
 import modal from "./modal";
+import filter from "./filter";
 import editExpenseSubCategory from "./editExpenseSubCategory";
 import date from "./date";
 
@@ -11,6 +12,7 @@ const store = configureStore({
         modal,
         editExpenseSubCategory,
         date,
+        filter,
     },
     middleware: [
         ...getDefaultMiddleware({

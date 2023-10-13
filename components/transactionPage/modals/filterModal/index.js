@@ -6,6 +6,7 @@ import { setFilterTransactionModalStatus } from '@/store/modal'
 import { updateData, listenForDataUpdates, deleteData, getData } from '@/app/firebase'
 import toast from "react-hot-toast";
 import classNames from 'classnames'
+import { setFilter } from '@/store/filter'
 
 
 function FilterTransactionModal() {
@@ -21,7 +22,7 @@ function FilterTransactionModal() {
     const [selectedAccount, setSelectedAccount] = useState([])
     const [selectedExpense, setSelectedExpense] = useState([])
     const [selectedIncome, setSelectedIncome] = useState([])
-    const [selectedTransaction, setSelectedTransaction] = useState([])
+    const [selectedTransactionType, setSelectedTransactionType] = useState([])
 
     const dispatch = useDispatch()
 
@@ -54,68 +55,78 @@ function FilterTransactionModal() {
     }
 
     const selectTransaction = (transactionId) => {
-        const currentSelection = selectedTransaction;
-        if (currentSelection.includes(transactionId)) {
-            const index = currentSelection.indexOf(transactionId);
+        if (selectedTransactionType.includes(transactionId)) {
+            const index = selectedTransactionType.indexOf(transactionId);
             if (index > -1) {
-                currentSelection.splice(index, 1);
-                setSelectedTransaction([...currentSelection]);
+                selectedTransactionType.splice(index, 1);
+                setSelectedTransactionType([...selectedTransactionType]);
             }
         } else {
-            currentSelection.push(transactionId);
-            setSelectedTransaction([...currentSelection]);
+            selectedTransactionType.push(transactionId);
+            setSelectedTransactionType([...selectedTransactionType]);
         }
     }
 
     const selectAccount = (account) => {
-        const currentSelection = selectedAccount;
-        if (currentSelection.includes(account)) {
-            const index = currentSelection.indexOf(account);
+        if (selectedAccount.includes(account)) {
+            const index = selectedAccount.indexOf(account);
             if (index > -1) {
-                currentSelection.splice(index, 1);
-                setSelectedAccount([...currentSelection]);
+                selectedAccount.splice(index, 1);
+                setSelectedAccount([...selectedAccount]);
             }
         } else {
-            currentSelection.push(account);
-            setSelectedAccount([...currentSelection]);
+            selectedAccount.push(account);
+            setSelectedAccount([...selectedAccount]);
         }
     }
 
     const selectExpense = (expense) => {
-        const currentSelection = selectedExpense;
-        if (currentSelection.includes(expense)) {
-            const index = currentSelection.indexOf(expense);
+        if (selectedExpense.includes(expense)) {
+            const index = selectedExpense.indexOf(expense);
             if (index > -1) {
-                currentSelection.splice(index, 1);
-                setSelectedExpense([...currentSelection]);
+                selectedExpense.splice(index, 1);
+                setSelectedExpense([...selectedExpense]);
             }
         } else {
-            currentSelection.push(expense);
-            setSelectedExpense([...currentSelection]);
+            selectedExpense.push(expense);
+            setSelectedExpense([...selectedExpense]);
         }
     }
 
     const selectIncome = (income) => {
-        const currentSelection = selectedIncome;
-        if (currentSelection.includes(income)) {
-            const index = currentSelection.indexOf(income);
+        if (selectedIncome.includes(income)) {
+            const index = selectedIncome.indexOf(income);
             if (index > -1) {
-                currentSelection.splice(index, 1);
-                setSelectedIncome([...currentSelection]);
+                selectedIncome.splice(index, 1);
+                setSelectedIncome([...selectedIncome]);
             }
         } else {
-            currentSelection.push(income);
-            setSelectedIncome([...currentSelection]);
+            selectedIncome.push(income);
+            setSelectedIncome([...selectedIncome]);
         }
+    }
+
+    const handleFilter = () => {
+        const filter = {}
+        if(selectedTransactionType.length > 0) filter.transactionType = selectedTransactionType
+        if(selectedAccount.length > 0) filter.account = selectedAccount
+        if(selectedExpense.length > 0) filter.expense = selectedExpense
+        if(selectedIncome.length > 0) filter.income = selectedIncome
+        if(startDate) filter.startDate = startDate
+        if(endDate) filter.endDate = endDate
+        
+        dispatch(setFilter(filter))
+        dispatch(setFilterTransactionModalStatus(!filterTransactionModalIsActive))
     }
 
 
 
-    useEffect(() => {
-        console.log(selectedTransaction)
-        console.log(selectedAccount)
-        console.log(selectedExpense)
-    }, [selectedTransaction])
+
+    // useEffect(() => {
+    //     console.log(selectedTransactionType)
+    //     console.log(selectedAccount)
+    //     console.log(selectedExpense)
+    // }, [selectedTransactionType])
 
 
     return (
@@ -142,22 +153,22 @@ function FilterTransactionModal() {
                             <button
                                 className={classNames('px-2', 'outline outline-1', 'outline-red-500', 'rounded', 'text-red-500',
                                     {
-                                        'bg-red-500': selectedTransaction.includes(2),
-                                        'text-white': selectedTransaction.includes(2)
+                                        'bg-red-500': selectedTransactionType.includes(2),
+                                        'text-white': selectedTransactionType.includes(2)
                                     }
                                 )}
                                 onClick={() => { selectTransaction(2) }}>Xərc</button>
                             <button className={classNames('px-2', 'outline outline-1', 'outline-green-500', 'rounded', 'text-green-500',
                                 {
-                                    'bg-green-500': selectedTransaction.includes(1),
-                                    'text-white': selectedTransaction.includes(1)
+                                    'bg-green-500': selectedTransactionType.includes(1),
+                                    'text-white': selectedTransactionType.includes(1)
                                 }
                             )}
                                 onClick={() => { selectTransaction(1) }}>Gəlir</button>
                             <button className={classNames('px-2', 'outline outline-1', 'outline-slate-500', 'rounded', 'text-slate-500',
                                 {
-                                    'bg-slate-500': selectedTransaction.includes(3),
-                                    'text-white': selectedTransaction.includes(3)
+                                    'bg-slate-500': selectedTransactionType.includes(3),
+                                    'text-white': selectedTransactionType.includes(3)
                                 }
                             )}
                                 onClick={() => { selectTransaction(3) }}>Köçürmə</button>
@@ -231,7 +242,7 @@ function FilterTransactionModal() {
                         </div>
                     </div>
 
-                    <button className='bg-green-500 rounded w-full py-2 text-white font-bold mt-8 tracking-widest'>Filter</button>
+                    <button className='bg-green-500 rounded w-full py-2 text-white font-bold mt-8 tracking-widest' onClick={handleFilter}>Filter</button>
                 </div>
             </div>
         </div>
