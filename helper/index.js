@@ -1,7 +1,7 @@
 export function filterTransactionforCategory(obj, categoryId, type, date) {
     const filteredTransactions = {};
-    const startDate = new Date(date.startDate).setHours(0, 0, 0)
-    const endDate = new Date(date.endDate).setHours(23, 59, 59)
+    const startDate = new Date(date.startDate)
+    const endDate = new Date(date.endDate)
 
     for (const key in obj) {
         const transaction = obj[key];

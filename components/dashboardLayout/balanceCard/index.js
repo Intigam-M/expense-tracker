@@ -21,8 +21,8 @@ function BalanceCard() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        const startDate = new Date(date.startDate).setHours(0, 0, 0)
-        const endDate = new Date(date.endDate).setHours(23, 59, 59)
+        const startDate = new Date(date.startDate)
+        const endDate = new Date(date.endDate)
         listenForDataUpdates('user/' + userId + '/transaction', (data) => {
             let income = 0
             let expense = 0
@@ -50,7 +50,7 @@ function BalanceCard() {
 
     const previousMonth = () => {
         const startDate = new Date(date.startDate)
-        const endDate = new Date(date.endDate)
+        const endDate = new Date(date.startDate)
 
         startDate.setMonth(startDate.getMonth() - 1)
         startDate.setDate(1)
@@ -62,7 +62,7 @@ function BalanceCard() {
 
     const nextMonth = () => {
         const startDate = new Date(date.startDate)
-        const endDate = new Date(date.endDate)
+        const endDate = new Date(date.startDate)
 
         startDate.setMonth(startDate.getMonth() + 1)
         endDate.setMonth(endDate.getMonth() + 2, 0)

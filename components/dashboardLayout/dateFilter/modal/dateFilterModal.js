@@ -3,39 +3,42 @@ import { useState, useEffect } from 'react'
 import { IoCloseSharp } from 'react-icons/io5'
 import { useDispatch, useSelector } from 'react-redux'
 import { setFilterDateModalStatus } from '@/store/modal'
-import { updateData, listenForDataUpdates, deleteData, getData } from '@/app/firebase'
+import { setStartDate, setEndDate } from '@/store/date'
 
 
 function DateFilterModal() {
 
-    const userId = useSelector(state => state.auth.user.uid)
     const filterDateModalIsActive = useSelector(state => state.modal.filterDate)
-    const [endDate, setEndDate] = useState('')
-    const [startDate, setstartDate] = useState('')
+    const [selectedStartDate, setSelectedStartDate] = useState('')
+    const [selectedEndDate, setSelectedEndDate] = useState('')
+    const date = useSelector(state => state.date)
 
 
     const dispatch = useDispatch()
 
     useEffect(() => {
+        let startDate = new Date(date.startDate)
+        startDate.setDate(startDate.getDate() + 1);
+        startDate = startDate.toISOString().substr(0, 10)
 
-        const currentDate = new Date();
-        const formattedDate = currentDate.toISOString().substr(0, 10);
-        setEndDate(formattedDate);
+        const endDate = new Date(date.endDate).toISOString().substr(0, 10)
 
-        // select current month first day
-        const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 2);
-        const formattedFirstDay = firstDay.toISOString().substr(0, 10);
-        setstartDate(formattedFirstDay);
-
-    }, []);
+        setSelectedStartDate(startDate)
+        setSelectedEndDate(endDate)
+    }, [date])
 
     const closeModal = () => {
         dispatch(setFilterDateModalStatus(!filterDateModalIsActive))
     }
 
-
     const handleDateFilter = () => {
-        console.log(startDate, endDate)
+        const startDate = new Date(selectedStartDate).setHours(0, 0, 0)
+        const endDate = new Date(selectedEndDate).setHours(23, 59, 59)
+
+        dispatch(setStartDate(startDate))
+        dispatch(setEndDate(endDate))
+
+        dispatch(setFilterDateModalStatus(!filterDateModalIsActive))
     }
 
     return (
@@ -50,10 +53,10 @@ function DateFilterModal() {
                 <div>
                     <div className='mt-5'>
                         <p className='text-sm text-slate-500'>Tarixden</p>
-                        <input type="date" className='p-1.5 border rounded w-full' value={startDate} onChange={e => setDate(e.target.value)} />
+                        <input type="date" className='p-1.5 border rounded w-full' value={selectedStartDate} onChange={e => setSelectedStartDate(e.target.value)} />
 
                         <p className='text-sm text-slate-500'>Tarixe</p>
-                        <input type="date" className='p-1.5 border rounded w-full' value={endDate} onChange={e => setDate(e.target.value)} />
+                        <input type="date" className='p-1.5 border rounded w-full' value={selectedEndDate} onChange={e => setSelectedEndDate(e.target.value)} />
                     </div>
                     <button className='bg-green-500 rounded w-full py-2 text-white font-bold mt-8 tracking-widest' onClick={handleDateFilter}>Filter</button>
                 </div>

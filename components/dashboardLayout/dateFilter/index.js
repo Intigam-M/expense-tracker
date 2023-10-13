@@ -9,8 +9,8 @@ import Backdrop from '@/components/global/backdrop'
 
 function DateFilter() {
     const date = useSelector(state => state.date)
-    const startDate = new Date(date.startDate).toLocaleDateString("tr-TR")
-    const endDate = new Date(date.endDate).toLocaleDateString("tr-TR")
+    const startDate = new Date(date.startDate).toDateString('az-AZ').substr(4, 11)
+    const endDate = new Date(date.endDate).toDateString('az-AZ').substr(4, 11)
     const filterDateModalIsActive = useSelector(state => state.modal.filterDate)
     const dispatch = useDispatch()
 
