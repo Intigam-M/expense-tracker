@@ -46,18 +46,16 @@ function BalanceCard() {
             }
             setBalance(balance)
         })
-
     }, [date])
-
 
     const previousMonth = () => {
         const startDate = new Date(date.startDate)
         const endDate = new Date(date.endDate)
-        
+
         startDate.setMonth(startDate.getMonth() - 1)
         startDate.setDate(1)
         endDate.setMonth(endDate.getMonth(), 0)
-        
+
         dispatch(setStartDate(startDate))
         dispatch(setEndDate(endDate))
     }
@@ -65,16 +63,13 @@ function BalanceCard() {
     const nextMonth = () => {
         const startDate = new Date(date.startDate)
         const endDate = new Date(date.endDate)
-        
+
         startDate.setMonth(startDate.getMonth() + 1)
         endDate.setMonth(endDate.getMonth() + 2, 0)
 
         dispatch(setStartDate(startDate))
         dispatch(setEndDate(endDate))
     }
-
-
-
 
     return (
         <div className='flex justify-center'>
