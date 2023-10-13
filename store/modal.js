@@ -10,6 +10,7 @@ const initialState = {
     transfer: false,
     updateTransaction: false,
     filterTransaction: false,
+    filterDate: false,
 }
 
 const modal = createSlice({ 
@@ -44,6 +45,10 @@ const modal = createSlice({
             state.filterTransaction = !state.filterTransaction
         },
 
+        setFilterDateModalStatus(state){
+            state.filterDate = !state.filterDate
+        },
+
         closeAllModal(state){
             state.addExpense = false
             state.updateExpenseCategory = false
@@ -54,10 +59,11 @@ const modal = createSlice({
             state.transfer = false
             state.updateTransaction = false
             state.filterTransaction = false
+            state.filterDate = false
         }
     }
 })
 
-export const {setAddExpenseModalStatus, setUpdateExpenseCategoryModalStatus, setAddIncomeModalStatus, setUpdateIncomeCategoryModalStatus, setUpdateAccountModalStatus, setTransferModalStatus, setEditExpenseSubCategoryModalStatus, setUpdateTransactionModalStatus, setFilterTransactionModalStatus, closeAllModal} = modal.actions
+export const {setAddExpenseModalStatus, setUpdateExpenseCategoryModalStatus, setAddIncomeModalStatus, setUpdateIncomeCategoryModalStatus, setUpdateAccountModalStatus, setTransferModalStatus, setEditExpenseSubCategoryModalStatus, setUpdateTransactionModalStatus, setFilterTransactionModalStatus, setFilterDateModalStatus, closeAllModal} = modal.actions
 export default modal.reducer
 
