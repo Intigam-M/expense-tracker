@@ -23,16 +23,27 @@ function TransactionContainer() {
     useEffect(() => {
         const startDate = new Date(date.startDate)
         const endDate = new Date(date.endDate)
-        
+
         listenForDataUpdates('user/' + userId + '/transaction', (data) => {
             if (!data) return
             const filteredData = {}
             Object.keys(data).map((transaction) => {
 
                 const transactionDate = new Date(data[transaction].date)
-                
-                if(transactionDate >= startDate && transactionDate <= endDate){
-                    filteredData[transaction] = data[transaction]
+                if (filter) {
+                    let transactionKey
+                    Object.keys(filter).map((filterKey) => {
+                        filterKey === 'income' || filterKey === 'expense' ? transactionKey = 'category' : transactionKey = filterKey
+                        if (filter[filterKey].includes(data[transaction][transactionKey])) {
+                            if (transactionDate >= startDate && transactionDate <= endDate) {
+                                filteredData[transaction] = data[transaction]
+                            }
+                        }
+                    })
+                } else {
+                    if (transactionDate >= startDate && transactionDate <= endDate) {
+                        filteredData[transaction] = data[transaction]
+                    }
                 }
             })
             setTransactions(filteredData)

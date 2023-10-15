@@ -13,8 +13,6 @@ function FilterTransactionModal() {
 
     const userId = useSelector(state => state.auth.user.uid)
     const filterTransactionModalIsActive = useSelector(state => state.modal.filterTransaction)
-    const [endDate, setEndDate] = useState('')
-    const [startDate, setstartDate] = useState('')
     const [accounts, setAccounts] = useState()
     const [expenses, setExpenses] = useState()
     const [incomes, setIncomes] = useState()
@@ -28,15 +26,6 @@ function FilterTransactionModal() {
 
     useEffect(() => {
 
-        const currentDate = new Date();
-        const formattedDate = currentDate.toISOString().substr(0, 10);
-        setEndDate(formattedDate);
-
-        // select current month first day
-        const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 2);
-        const formattedFirstDay = firstDay.toISOString().substr(0, 10);
-        setstartDate(formattedFirstDay);
-
         getData('user/' + userId + '/account/')
             .then(data => setAccounts(data))
 
@@ -45,9 +34,6 @@ function FilterTransactionModal() {
 
         getData('user/' + userId + '/incomeCategory/')
             .then(data => setIncomes(data))
-
-
-
     }, []);
 
     const closeModal = () => {
@@ -112,22 +98,9 @@ function FilterTransactionModal() {
         if(selectedAccount.length > 0) filter.account = selectedAccount
         if(selectedExpense.length > 0) filter.expense = selectedExpense
         if(selectedIncome.length > 0) filter.income = selectedIncome
-        if(startDate) filter.startDate = startDate
-        if(endDate) filter.endDate = endDate
-        
         dispatch(setFilter(filter))
         dispatch(setFilterTransactionModalStatus(!filterTransactionModalIsActive))
     }
-
-
-
-
-    // useEffect(() => {
-    //     console.log(selectedTransactionType)
-    //     console.log(selectedAccount)
-    //     console.log(selectedExpense)
-    // }, [selectedTransactionType])
-
 
     return (
         <div className='bg-white w-4/12 absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded'>
@@ -139,13 +112,6 @@ function FilterTransactionModal() {
             </div>
             <div className='pb-5 px-5'>
                 <div>
-                    <div className='mt-5'>
-                        <p className='text-sm text-slate-500'>Tarixden</p>
-                        <input type="date" className='p-1.5 border rounded w-full' value={startDate} onChange={e => setDate(e.target.value)} />
-
-                        <p className='text-sm text-slate-500'>Tarixe</p>
-                        <input type="date" className='p-1.5 border rounded w-full' value={endDate} onChange={e => setDate(e.target.value)} />
-                    </div>
                     <div className='pt-5 border-b '>
 
                         <p className='text-slate-500'>Əməliyyat növü</p>
