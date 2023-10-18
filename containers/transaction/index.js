@@ -8,6 +8,8 @@ import Backdrop from "@/components/global/backdrop"
 import UpdateTransactionModal from '@/components/transactionPage/modals/updateModal';
 import FilterTransactionModal from '@/components/transactionPage/modals/filterModal';
 import { VscSettings } from 'react-icons/vsc'
+import { MdFilterAltOff } from 'react-icons/md'
+import { setFilterStatus, resertFilter } from '@/store/filter'
 function TransactionContainer() {
 
     const [transactions, setTransactions] = useState()
@@ -17,6 +19,7 @@ function TransactionContainer() {
     const [editTransactionId, setEditTransactionId] = useState()
     const date = useSelector(state => state.date)
     const filter = useSelector(state => state.filter.filterData)
+    const filterStatus = useSelector(state => state.filter.filterStatus)
     const dispatch = useDispatch()
 
 
@@ -60,6 +63,11 @@ function TransactionContainer() {
         dispatch(setFilterTransactionModalStatus(!filterTransactionModalIsActive))
     }
 
+    const handleResetFilter = () => {
+        dispatch(resertFilter())
+        dispatch(setFilterStatus(false))
+    }
+
 
     return (
         <div >
@@ -67,18 +75,14 @@ function TransactionContainer() {
             {updateTransactionModalIsActive && <UpdateTransactionModal transactionId={editTransactionId} transactions={transactions} />}
             {filterTransactionModalIsActive && <FilterTransactionModal />}
             <div className='flex flex-col gap-2 w-4/12 mx-auto'>
+                <div className="flex justify-end mb-1 gap-2">
+                    {filterStatus && <MdFilterAltOff title="Reset filter" size={35} className='text-2xl text-white p-1 rounded cursor-pointer bg-red-400' onClick={handleResetFilter} />}
+                    <VscSettings title="Filter" size={35} className="text-2xl text-white p-1 rounded cursor-pointer bg-green-400" onClick={handleFilterClick} />
+                </div>
                 {transactions && Object.keys(transactions).map((transaction, index) => {
                     return <Transaction key={index} transaction={transactions[transaction]} onClick={() => handleTransactionClick(transaction)} />
                 })}
             </div>
-
-            <div className='flex justify-end sticky bottom-0 w-5/12 mx-auto pb-5' onClick={handleFilterClick}>
-                <button>
-                    <VscSettings className='text-5xl text-white bg-green-400 rounded-full p-2' />
-                </button>
-            </div>
-
-
         </div>
     )
 }

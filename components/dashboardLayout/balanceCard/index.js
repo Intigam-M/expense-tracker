@@ -54,7 +54,9 @@ function BalanceCard() {
 
         startDate.setMonth(startDate.getMonth() - 1)
         startDate.setDate(1)
+        startDate.setHours(0, 0, 0)
         endDate.setMonth(endDate.getMonth(), 0)
+        endDate.setHours(23, 59, 59)
 
         dispatch(setStartDate(startDate))
         dispatch(setEndDate(endDate))
@@ -65,7 +67,9 @@ function BalanceCard() {
         const endDate = new Date(date.startDate)
 
         startDate.setMonth(startDate.getMonth() + 1)
+        startDate.setHours(0, 0, 0)
         endDate.setMonth(endDate.getMonth() + 2, 0)
+        endDate.setHours(23, 59, 59)
 
         dispatch(setStartDate(startDate))
         dispatch(setEndDate(endDate))

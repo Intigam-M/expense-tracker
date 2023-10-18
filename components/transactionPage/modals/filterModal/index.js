@@ -6,7 +6,7 @@ import { setFilterTransactionModalStatus } from '@/store/modal'
 import { updateData, listenForDataUpdates, deleteData, getData } from '@/app/firebase'
 import toast from "react-hot-toast";
 import classNames from 'classnames'
-import { setFilter } from '@/store/filter'
+import { setFilter, setFilterStatus } from '@/store/filter'
 
 
 function FilterTransactionModal() {
@@ -99,6 +99,7 @@ function FilterTransactionModal() {
         if(selectedExpense.length > 0) filter.expense = selectedExpense
         if(selectedIncome.length > 0) filter.income = selectedIncome
         dispatch(setFilter(filter))
+        dispatch(setFilterStatus(true))
         dispatch(setFilterTransactionModalStatus(!filterTransactionModalIsActive))
     }
 
