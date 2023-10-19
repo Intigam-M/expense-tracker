@@ -7,7 +7,7 @@ import { pushData, updateData, listenForDataUpdates, deleteData, getData } from 
 import toast from "react-hot-toast";
 import { accountIconList } from "@/lib/icon"
 import IconWithProps from '@/components/global/IconWithProps'
-
+import Swal from 'sweetalert2'
 
 function UpdateAccountModal({ categoryId }) {
     const [name, setName] = useState('')
@@ -91,8 +91,30 @@ function UpdateAccountModal({ categoryId }) {
     }
 
     const deleteAccountCategory = () => {
-        deleteData('user/' + userId + '/account/' + categoryId)
-        dispatch(setUpdateAccountModalStatus(!updateAccountModalIsActive))
+
+        const deletedTrasactions = []
+        getData('user/' + userId + '/transaction').then((data) => {
+            Object.keys(data).map((item, index) => {
+                if (data[item].account === categoryId || data[item].category === categoryId) {
+                    deletedTrasactions.push(item)
+                }
+            })
+
+            Swal.fire({
+                title: `Bu hesab ile elaqeli ${deletedTrasactions.length} emeliyyat silinecek!`,
+                showDenyButton: true,
+                confirmButtonText: 'Confirm',
+                confirmButtonColor: '#3085d6',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deletedTrasactions.map((item, index) => {
+                        deleteData('user/' + userId + '/transaction/' + item)
+                    })
+                    deleteData('user/' + userId + '/account/' + categoryId)
+                    dispatch(setUpdateAccountModalStatus(!updateAccountModalIsActive))
+                }
+            })
+        })
     }
 
 
@@ -169,7 +191,7 @@ function UpdateAccountModal({ categoryId }) {
             {
                 categoryId &&
                 <div className='border-t mt-2 py-5 px-5'>
-                    <button className=' py-2 w-full bg-red-500 rounded text-white font-bold' onClick={deleteAccountCategory}>Delete Income</button>
+                    <button className=' py-2 w-full bg-red-500 rounded text-white font-bold' onClick={deleteAccountCategory}>Delete Account</button>
                 </div>
             }
         </div>

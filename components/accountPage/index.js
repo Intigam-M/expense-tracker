@@ -48,7 +48,7 @@ function Account({ category, categoryId, transaction, handleEditClick, handleTra
 
     return (
         <div className='flex justify-center'>
-            <div className='w-4/12 flex gap-3 items-center border border-slate-300 shadow p-2 bg-slate-100 rounded'>
+            <div className='w-full flex gap-3 items-center border border-slate-300 shadow p-2 bg-slate-100 rounded'>
                 <div>
                     <AccountIcon className='text-5xl text-white p-3 rounded' style={IconBackground} />
                 </div>

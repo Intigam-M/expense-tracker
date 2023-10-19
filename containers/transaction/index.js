@@ -49,7 +49,19 @@ function TransactionContainer() {
                     }
                 }
             })
-            setTransactions(filteredData)
+            
+            const filterDataEntries = Object.entries(filteredData)
+            const orderProcess = filterDataEntries.sort((a, b) => {
+                return new Date(b[1].date) - new Date(a[1].date)
+            })
+
+            const orderedData = {}
+          
+            orderProcess.forEach((transaction) => {
+                orderedData[transaction[0]] = transaction[1]
+            })
+
+            setTransactions(orderedData)
         })
     }, [date, filter])
 

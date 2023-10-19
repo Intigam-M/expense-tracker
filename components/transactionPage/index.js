@@ -10,9 +10,9 @@ function Transaction({ transaction, onClick }) {
 
     const [account, setAccount] = useState('')
     const [category, setCategory] = useState('')
+    const [subCategory, setSubCategory] = useState('')
     const userId = useSelector(state => state.auth.user.uid)
     const Icon = ReactIcons[category?.icon];
-
 
     useEffect(() => {
         listenForDataUpdates('user/' + userId + '/account/' + transaction.account, (data) => {
@@ -25,6 +25,9 @@ function Transaction({ transaction, onClick }) {
             })
         } else if (transaction.transactionType == 2) {
             listenForDataUpdates('user/' + userId + '/expenseCategory/' + transaction.category, (data) => {
+                if(data?.subCategory[transaction?.subCategory]){
+                    setSubCategory(data?.subCategory[transaction?.subCategory])
+                }
                 setCategory(data)
             })
         }else if (transaction.transactionType == 3) {
@@ -53,7 +56,7 @@ function Transaction({ transaction, onClick }) {
                                 }
                             </div>
                             <div>
-                                <p className='font-medium'>{category?.name}</p>
+                                <p className='font-medium'>{category?.name} {subCategory && '('+subCategory+')'}</p>
                                 <p className='text-sm text-slate-400'>{account?.name}</p>
                             </div>
                         </div>

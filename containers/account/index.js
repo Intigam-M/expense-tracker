@@ -54,7 +54,10 @@ function AccountContainer() {
             {updateAccountModalIsActive && <UpdateAccountModal categoryId={editAccountCategoryId} />}
             {transferModalIsActive && <TransferModal accounts={accountCategory} categoryId={transferAccountCategoryId} />}
 
-            <div className='flex flex-col gap-4'>
+            <div className='flex flex-col gap-2 w-4/12 mx-auto'>
+                <div className="flex justify-end mb-1 gap-2">
+                    <MdAddCircle title="Filter" size={35} className="text-2xl text-white p-1 rounded cursor-pointer bg-green-400" onClick={handleAddClick} />
+                </div>
 
                 {accountCategory && Object.keys(accountCategory).map((item, index) => {
                     return (
@@ -62,17 +65,11 @@ function AccountContainer() {
                             key={index}
                             category={accountCategory[item]}
                             categoryId={item}
-                            transaction={transaction} 
+                            transaction={transaction}
                             handleEditClick={() => handleEditClick(item)}
                             handleTransferClick={() => handleTransferClick(item)} />
                     )
                 })}
-
-                <div className='flex justify-end sticky bottom-0 w-6/12  mx-auto pb-5 pr-5 '>
-                    <button onClick={handleAddClick}>
-                        <MdAddCircle className='text-7xl text-green-400' />
-                    </button>
-                </div>
             </div>
         </div>
     )
